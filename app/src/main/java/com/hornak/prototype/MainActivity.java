@@ -1,5 +1,6 @@
 package com.hornak.prototype;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,18 +12,20 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.hornak.prototype.model.quizzes.Quiz;
 import com.hornak.prototype.ui.DynamicHeightNetworkImageView;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
-
-    private ArrayList<String> testList = new ArrayList<>();
 
     private String QUIZZES_KEY = "QUIZZES_NODE";
     private FirebaseHelper frbsHelper;
@@ -31,65 +34,46 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        testList.add("a");
-        testList.add("b");
-        testList.add("c");
-        testList.add("d");
-
+        //Recycler view
+        setContentView(R.layout.activity_main);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        int columnCount = getResources().getInteger(R.integer.list_column_count);
+        StaggeredGridLayoutManager sglm = new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(sglm);
 
         //Firebase database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         frbsHelper = new FirebaseHelper(database.getReference(QUIZZES_KEY));
 
-//        //Listening
-//        myRef.addValueEventListener((new ValueEventListener() {
-//
-//            Context mContext;
-//
-//            public ValueEventListener setContext(Context context){
-//                mContext = context;
-//                return this;
-//            }
-//
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                // This method is called once with the initial value and again whenever data at this location is updated.
-//                mQuizzes value = dataSnapshot.getValue(mQuizzes.class);
-//                Log.i("-------------->", "I was talking to db!");
-//                Toast.makeText(mContext, value.getQuizList().get(1).getName(), Toast.LENGTH_LONG).show();
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError error) {
-//                // Failed to read value
-//                Toast.makeText(mContext, "Something went wrong during fetching from DB", Toast.LENGTH_SHORT).show();
-//            }
-//        }).setContext(this));
+        //Listening
+        frbsHelper.db.addValueEventListener((new ValueEventListener() {
 
+            Context mContext;
+            List<Quiz> mQuizzes = new ArrayList<>();
 
-        setContentView(R.layout.activity_main);
+            public ValueEventListener setContext(Context context){
+                mContext = context;
+                return this;
+            }
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        Adapter adapter = new Adapter(frbsHelper.retrieve());
-        //Adapter adapter = new Adapter(testList);
-        adapter.setHasStableIds(true);
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again whenever data at this location is updated.
+                Iterator a = dataSnapshot.getChildren().iterator();
+                mQuizzes.clear();
+                while (a.hasNext()) {
+                    mQuizzes.add(((DataSnapshot)a.next()).getValue(Quiz.class));
+                }
+                mRecyclerView.setAdapter(new Adapter(mQuizzes));
+            }
 
-//        FirebaseListAdapter adapter = new FirebaseListAdapter<Quiz>(this, Quiz.class, R.layout.main_list_item, myRef) {
-//
-//            @Override
-//            protected void populateView(View view, Quiz myObj, int position) {
-//                //Set the value for the views
-//                ((TextView)view.findViewById(R.id.article_title)).setText(myObj.getName());
-//                //...
-//            }
-//        };
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Toast.makeText(mContext, "Something went wrong during fetching from DB", Toast.LENGTH_SHORT).show();
+            }
+        }).setContext(this));
 
-
-        mRecyclerView.setAdapter(adapter);
-        int columnCount = getResources().getInteger(R.integer.list_column_count);
-        StaggeredGridLayoutManager sglm = new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(sglm);
 
         if (savedInstanceState == null) {
             //refresh();
