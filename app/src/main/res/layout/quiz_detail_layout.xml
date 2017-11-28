@@ -3,19 +3,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-    <TextView
-        android:id="@+id/blah"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="BLAH!"/>
+        android:layout_height="match_parent"
+        android:layout_margin="15dp"
+        android:elevation="@dimen/fab_elevation"
+        android:orientation="vertical"
+        android:padding="15dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+
+        <TextView
+            android:id="@+id/quiz_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textSize="25sp"
+            android:textStyle="bold"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
 
 
-    <TextView
-        android:id="@+id/quiz_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
+    </LinearLayout>
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/toolbar_container"
@@ -42,7 +54,7 @@
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:contentInsetStart="72dp"
                 app:layout_collapseMode="pin"
-                app:navigationIcon="@drawable/logo"/>
+                app:navigationIcon="@drawable/logo" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
