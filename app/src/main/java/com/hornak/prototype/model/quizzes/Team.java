@@ -21,22 +21,24 @@ public class Team implements Parcelable {
             return new Team[size];
         }
     };
+
     public String name;
     public String pointsAchieved;
 
-public Team(){}
-
-        public Team(String name, String pointsAchieved){
-        this.name = name;
-        this.pointsAchieved = pointsAchieved;
-    };
-
-    public Team(Parcel in){
-        this.name = in.readString();
-        this.pointsAchieved =  in.readString();
+    public Team() {
     }
 
-public String getName() {
+    public Team(String name, String pointsAchieved) {
+        this.name = name;
+        this.pointsAchieved = pointsAchieved;
+    }
+
+    public Team(Parcel in) {
+        this.name = in.readString();
+        this.pointsAchieved = in.readString();
+    }
+
+    public String getName() {
         return name;
     }
 

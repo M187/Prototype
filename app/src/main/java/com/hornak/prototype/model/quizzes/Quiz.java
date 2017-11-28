@@ -3,6 +3,7 @@ package com.hornak.prototype.model.quizzes;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,6 +24,7 @@ public class Quiz implements Parcelable {
             return new Quiz[size];
         }
     };
+
     public String name;
     public String timestamp;
     public List<Team> teams;
@@ -38,6 +40,7 @@ public class Quiz implements Parcelable {
     public Quiz(Parcel in){
         this.name = in.readString();
         this.timestamp = in.readString();
+        this.teams = new ArrayList<>();
         in.readTypedList(teams, Team.CREATOR);
     }
 
