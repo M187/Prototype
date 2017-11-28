@@ -1,0 +1,60 @@
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/blah"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="BLAH!"/>
+
+
+    <TextView
+        android:id="@+id/quiz_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/toolbar_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_max_height">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/toolbar_"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:collapsedTitleTextAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse"
+            app:expandedTitleMarginStart="72dp"
+            app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:contentInsetStart="72dp"
+                app:layout_collapseMode="pin"
+                app:navigationIcon="@drawable/logo"/>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:elevation="@dimen/fab_elevation"
+        android:onClick="sendNewData"
+        app:srcCompat="@mipmap/ic_settings_white_24dp" />
+
+</android.support.design.widget.CoordinatorLayout>

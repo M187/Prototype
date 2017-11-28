@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
                     mQuizzes.add(((DataSnapshot)a.next()).getValue(Quiz.class));
                 }
                 mRecyclerView.setAdapter(new Adapter(mQuizzes));
+                mRecyclerView.invalidate();
             }
 
             @Override
@@ -117,9 +118,12 @@ public class MainActivity extends AppCompatActivity {
             View view = getLayoutInflater().inflate(R.layout.main_list_item, parent, false);
             final ViewHolder vh = new ViewHolder(view);
             view.setOnClickListener(new View.OnClickListener() {
+
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(Intent.ACTION_VIEW));
+                    Intent temp = new Intent(view.getContext(), QuizDetailActivity.class);
+                    temp.putExtra("QUIZ", mList.get(vh.getAdapterPosition()));
+                    startActivity(temp);
                 }
             });
             return vh;

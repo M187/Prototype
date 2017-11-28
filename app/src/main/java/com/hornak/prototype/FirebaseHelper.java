@@ -81,14 +81,13 @@ public class FirebaseHelper {
         List<Team> teamList = new ArrayList<>();
         teamList.add(new Team("myTeam1", "10"));
         teamList.add(new Team("myTeam2", "15"));
-        Quiz testQuiz = new Quiz("First quiz press", "21092017", teamList);
+        Quiz testQuiz = new Quiz("First quiz", "21092017", teamList);
 
         List<Team> teamList2 = new ArrayList<>();
         teamList2.add(new Team("myTeam1", "11"));
         teamList2.add(new Team("myTeam2", "16"));
-        Quiz testQuiz2 = new Quiz("Second quiz press", "21092017", teamList2);
+        Quiz testQuiz2 = new Quiz("Second quiz", "21092017", teamList2);
 
-        List<Quiz> quizzList = new ArrayList<>();
         db.child("Qiuz").setValue(testQuiz);
         db.child("Quiz").setValue(testQuiz2);
     }
