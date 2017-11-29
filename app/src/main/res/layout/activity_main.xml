@@ -34,7 +34,7 @@
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:contentInsetStart="72dp"
                 app:layout_collapseMode="pin"
-                app:navigationIcon="@drawable/logo"/>
+                app:navigationIcon="@drawable/header_logo_image"/>
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
