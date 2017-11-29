@@ -1,6 +1,6 @@
 <resources>
 
-    <string name="app_name">QuizApp</string>
+    <string name="app_name">appQuiz</string>
     <string name="welcome_quiz_app">Welcome to quizApp Reader!</string>
 
     <string name="action_refresh">Refresh</string>
