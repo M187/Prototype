@@ -79,8 +79,14 @@ public class FirebaseHelper {
     public void makeTestData() {
         //insert data into database - use in admin app
         List<Team> teamList = new ArrayList<>();
-        teamList.add(new Team("myTeam1", "10"));
-        teamList.add(new Team("myTeam2", "15"));
+        teamList.add(new Team("myTeam1", String.valueOf((int)(Math.random()*30))));
+        teamList.add(new Team("myTeam2", String.valueOf((int)(Math.random()*30))));
+        teamList.add(new Team("myTeam3", String.valueOf((int)(Math.random()*30))));
+        teamList.add(new Team("myTeam4", String.valueOf((int)(Math.random()*30))));
+        teamList.add(new Team("myTeam5", String.valueOf((int)(Math.random()*30))));
+        teamList.add(new Team("myTeam6", String.valueOf((int)(Math.random()*30))));
+        teamList.add(new Team("myTeam7", String.valueOf((int)(Math.random()*30))));
+        teamList.add(new Team("myTeam8", String.valueOf((int)(Math.random()*30))));
         Quiz testQuiz = new Quiz("First quiz", "21092017", teamList);
 
         List<Team> teamList2 = new ArrayList<>();
@@ -88,7 +94,31 @@ public class FirebaseHelper {
         teamList2.add(new Team("myTeam2", "16"));
         Quiz testQuiz2 = new Quiz("Second quiz", "21092017", teamList2);
 
-        db.child("Qiuz").setValue(testQuiz);
-        db.child("Quiz").setValue(testQuiz2);
+        List<Team> teamList3 = new ArrayList<>();
+        teamList3.add(new Team("myTeam1", "4"));
+        teamList3.add(new Team("myTeam2", "6"));
+        Quiz testQuiz3 = new Quiz("Third quiz", "21092017", teamList3);
+
+        List<Team> teamList4 = new ArrayList<>();
+        teamList4.add(new Team("myTeam1", "7"));
+        teamList4.add(new Team("myTeam2", "12"));
+        Quiz testQuiz4 = new Quiz("Fourth quiz", "21092017", teamList4);
+
+        List<Team> teamList5 = new ArrayList<>();
+        teamList5.add(new Team("myTeam1", "13"));
+        teamList5.add(new Team("myTeam2", "16"));
+        Quiz testQuiz5 = new Quiz("Fifth quiz", "21092017", teamList5);
+
+        List<Team> teamList6 = new ArrayList<>();
+        teamList6.add(new Team("myTeam1", "11"));
+        teamList6.add(new Team("myTeam2", "9"));
+        Quiz testQuiz6 = new Quiz("Sixth quiz", "21092017", teamList6);
+
+        db.child(testQuiz.getName()).setValue(testQuiz);
+        db.child(testQuiz2.getName()).setValue(testQuiz2);
+        db.child(testQuiz3.getName()).setValue(testQuiz3);
+        db.child(testQuiz4.getName()).setValue(testQuiz4);
+        db.child(testQuiz5.getName()).setValue(testQuiz5);
+        db.child(testQuiz6.getName()).setValue(testQuiz6);
     }
 }
