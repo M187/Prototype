@@ -18,12 +18,11 @@ import com.hornak.prototype.ui.DynamicHeightNetworkImageView;
 
 public class MainActivity extends AppCompatActivity {
 
+    FirebaseRecyclerAdapter mFirebaseAdapter;
     private RecyclerView mRecyclerView;
-
     private String QUIZZES_KEY = "QUIZZES_NODE";
     private FirebaseHelper frbsHelper;
     private DatabaseReference firebaseDBRef;
-    private FirebaseRecyclerAdapter mFirebaseAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,15 +77,18 @@ public class MainActivity extends AppCompatActivity {
         DynamicHeightNetworkImageView thumbnailView;
         TextView titleView;
         TextView subtitleView;
+        Quiz mQuiz;
 
         public QuizViewHolder(View view) {
             super(view);
             thumbnailView = (DynamicHeightNetworkImageView) view.findViewById(R.id.thumbnail);
             titleView = (TextView) view.findViewById(R.id.article_title);
             subtitleView = (TextView) view.findViewById(R.id.article_subtitle);
+            view.setOnClickListener(this);
         }
 
         public void bindView(Quiz quiz) {
+            mQuiz = quiz;
             this.titleView.setText(quiz.getName());
             this.subtitleView.setText(
                     DateUtils.getRelativeTimeSpanString(
@@ -98,8 +100,8 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View view) {
             Intent temp = new Intent(view.getContext(), QuizDetailActivity.class);
             this.getLayoutPosition();
-//            temp.putExtra("QUIZ", mList.get(vh.getAdapterPosition()));
-//            startActivity(temp);
+            temp.putExtra("QUIZ", mQuiz);
+            view.getContext().startActivity(temp);
         }
     }
 }
