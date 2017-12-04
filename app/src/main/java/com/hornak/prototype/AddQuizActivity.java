@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.database.FirebaseDatabase;
 import com.hornak.prototype.model.quizzes.Quiz;
@@ -38,6 +39,9 @@ public class AddQuizActivity extends AppCompatActivity {
         //todo: initialize listOfTeams?
         Quiz newQuiz = new Quiz(name, date, noOfTeams, place, theme, null);
 
+        //todo - validations
+
         fbHelper.save(newQuiz);
+        Toast.makeText(getApplicationContext(), "Entry succ. added!", Toast.LENGTH_LONG);
     }
 }

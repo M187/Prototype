@@ -1,5 +1,7 @@
 package com.hornak.prototype;
 
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +21,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.hornak.prototype.model.quizzes.Quiz;
 import com.hornak.prototype.ui.DynamicHeightNetworkImageView;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
+import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -57,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
         //Recycler view
         setContentView(R.layout.activity_main);
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+
+        setupFab();
 
         //Firebase database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -108,6 +115,71 @@ public class MainActivity extends AppCompatActivity {
         //todo mFirebaseAdapter.startListening();
     }
 
+    public void setupFab() {
+
+        // Set up the white button on the lower right corner
+        // more or less with default parameter
+        final ImageView fabIconNew = new ImageView(this);
+        fabIconNew.setImageDrawable(getResources().getDrawable(R.mipmap.ic_settings_white_24dp));
+        //fabIconNew.setBackgroundTintList(ColorStateList.valueOf(Color.YELLOW));
+
+        final FloatingActionButton rightLowerButton = new FloatingActionButton.Builder(this)
+                .setContentView(fabIconNew)
+                .setTheme(SubActionButton.THEME_DARK)
+                .build();
+
+        SubActionButton.Builder rLSubBuilder = new SubActionButton.Builder(this);
+        ImageView rlIcon1 = new ImageView(this);
+        ImageView rlIcon2 = new ImageView(this);
+        ImageView rlIcon3 = new ImageView(this);
+        ImageView rlIcon4 = new ImageView(this);
+
+        rlIcon1.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_black_24dp));
+        rlIcon2.setImageDrawable(getResources().getDrawable(R.drawable.ic_share));
+        rlIcon3.setImageDrawable(getResources().getDrawable(R.drawable.ic_share));
+        rlIcon4.setImageDrawable(getResources().getDrawable(R.drawable.ic_share));
+
+        // Build the menu with default options: light theme, 90 degrees, 72dp radius.
+        // Set 4 default SubActionButtons
+        final FloatingActionMenu rightLowerMenu = new FloatingActionMenu.Builder(this)
+                .addSubActionView(rLSubBuilder.setContentView(rlIcon1).build())
+                .addSubActionView(rLSubBuilder.setContentView(rlIcon2).build())
+                .addSubActionView(rLSubBuilder.setContentView(rlIcon3).build())
+                .addSubActionView(rLSubBuilder.setContentView(rlIcon4).build())
+                .attachTo(rightLowerButton)
+                .build();
+
+        rlIcon1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), AddQuizActivity.class));
+            }
+        });
+
+
+        // Listen menu open and close events to animate the button content view
+        rightLowerMenu.setStateChangeListener(new FloatingActionMenu.MenuStateChangeListener() {
+
+            @Override
+            public void onMenuOpened(FloatingActionMenu menu) {
+                // Rotate the icon of rightLowerButton 45 degrees clockwise
+                fabIconNew.setRotation(0);
+                PropertyValuesHolder pvhR = PropertyValuesHolder.ofFloat(View.ROTATION, 45);
+                ObjectAnimator animation = ObjectAnimator.ofPropertyValuesHolder(fabIconNew, pvhR);
+                animation.start();
+            }
+
+            @Override
+            public void onMenuClosed(FloatingActionMenu menu) {
+                // Rotate the icon of rightLowerButton 45 degrees counter-clockwise
+                fabIconNew.setRotation(45);
+                PropertyValuesHolder pvhR = PropertyValuesHolder.ofFloat(View.ROTATION, 0);
+                ObjectAnimator animation = ObjectAnimator.ofPropertyValuesHolder(fabIconNew, pvhR);
+                animation.start();
+            }
+        });
+    }
+
     public static class QuizViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         DynamicHeightNetworkImageView thumbnailView;
         TextView titleView;
@@ -139,4 +211,6 @@ public class MainActivity extends AppCompatActivity {
             view.getContext().startActivity(temp);
         }
     }
+
+
 }

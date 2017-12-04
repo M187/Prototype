@@ -1,13 +1,19 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@mipmap/background"
+    android:backgroundTint="@color/background_tint"
+    android:backgroundTintMode="src_over">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="15dp"
+        android:backgroundTint="@color/background_tint"
         android:elevation="@dimen/fab_elevation"
+        android:foregroundTintMode="add"
+        android:gravity="start"
         android:orientation="vertical"
         android:padding="15dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -22,8 +28,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
-                android:gravity="center_horizontal"
-                android:textSize="25sp"
+                android:layout_weight="2"
+                android:gravity="start"
+                android:text="Kvizomeno:"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <EditText
@@ -32,10 +40,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|top"
                 android:layout_marginBottom="15dp"
+                android:layout_weight="1"
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:nextFocusForward="@+id/button_main_1"
-                android:textSize="25sp" />
+                android:nextFocusForward="@+id/quiz_date_edit"
+                android:textSize="18sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -48,8 +56,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
-                android:gravity="center_horizontal"
-                android:textSize="25sp"
+                android:layout_weight="2"
+                android:gravity="start"
+                android:text="Kvizodatum:"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <EditText
@@ -58,10 +68,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|top"
                 android:layout_marginBottom="15dp"
+                android:layout_weight="1"
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:nextFocusForward="@+id/button_main_1"
-                android:textSize="25sp" />
+                android:nextFocusForward="@+id/quiz_number_of_teams_edit"
+                android:textSize="18sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -74,8 +84,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
-                android:gravity="center_horizontal"
-                android:textSize="25sp"
+                android:layout_weight="2"
+                android:gravity="start"
+                android:text="Pocet teamov (max):"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <EditText
@@ -84,10 +96,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|top"
                 android:layout_marginBottom="15dp"
+                android:layout_weight="1"
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:nextFocusForward="@+id/button_main_1"
-                android:textSize="25sp" />
+                android:nextFocusForward="@+id/quiz_place_edit"
+                android:textSize="18sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -100,8 +112,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
-                android:gravity="center_horizontal"
-                android:textSize="25sp"
+                android:layout_weight="2"
+                android:gravity="start"
+                android:text="Kvizomiesto:"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <EditText
@@ -110,10 +124,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|top"
                 android:layout_marginBottom="15dp"
+                android:layout_weight="1"
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:nextFocusForward="@+id/button_main_1"
-                android:textSize="25sp" />
+                android:nextFocusForward="@+id/quiz_theme_edit"
+                android:textSize="18sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -126,21 +140,35 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
-                android:gravity="center_horizontal"
-                android:textSize="25sp"
+                android:layout_weight="1"
+                android:gravity="start"
+                android:text="Kvizotema:"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/quiz_theme_edit"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|top"
                 android:layout_marginBottom="15dp"
+                android:layout_weight="1"
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:nextFocusForward="@+id/button_main_1"
-                android:textSize="25sp" />
+                android:nextFocusForward="@+id/quiz_name_edit"
+                android:textSize="18sp" />
         </LinearLayout>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="5dp"
+            android:background="@color/primary_text"
+            android:gravity="center"
+            android:onClick="addQuiz"
+            android:text="ADD"
+            android:textColor="@color/cardview_light_background"
+            android:textSize="22sp" />
 
     </LinearLayout>
 
@@ -173,15 +201,5 @@
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:elevation="@dimen/fab_elevation"
-        android:onClick="sendNewData"
-        app:srcCompat="@mipmap/ic_settings_white_24dp" />
 
 </android.support.design.widget.CoordinatorLayout>
