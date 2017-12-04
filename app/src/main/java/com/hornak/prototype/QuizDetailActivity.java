@@ -29,7 +29,7 @@ public class QuizDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.quiz_detail_layout);
+        setContentView(R.layout.activity_quiz_detail);
         ButterKnife.bind(this);
 
         Bundle data = getIntent().getExtras();

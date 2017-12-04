@@ -87,32 +87,32 @@ public class FirebaseHelper {
         teamList.add(new Team("myTeam6", String.valueOf((int)(Math.random()*30))));
         teamList.add(new Team("myTeam7", String.valueOf((int)(Math.random()*30))));
         teamList.add(new Team("myTeam8", String.valueOf((int)(Math.random()*30))));
-        Quiz testQuiz = new Quiz("First quiz", "21092017", teamList);
+        Quiz testQuiz = new Quiz("First quiz", "21092017", "10", "Earth", "Some fancy theme.", teamList);
 
         List<Team> teamList2 = new ArrayList<>();
         teamList2.add(new Team("myTeam1", "11"));
         teamList2.add(new Team("myTeam2", "16"));
-        Quiz testQuiz2 = new Quiz("Second quiz", "21092017", teamList2);
+        Quiz testQuiz2 = new Quiz("Second quiz", "21092017", "10", "Earth", "Some fancy theme.", teamList2);
 
         List<Team> teamList3 = new ArrayList<>();
         teamList3.add(new Team("myTeam1", "4"));
         teamList3.add(new Team("myTeam2", "6"));
-        Quiz testQuiz3 = new Quiz("Third quiz", "21092017", teamList3);
+        Quiz testQuiz3 = new Quiz("Third quiz", "21092017", "10", "Earth", "Some fancy theme.", teamList3);
 
         List<Team> teamList4 = new ArrayList<>();
         teamList4.add(new Team("myTeam1", "7"));
         teamList4.add(new Team("myTeam2", "12"));
-        Quiz testQuiz4 = new Quiz("Fourth quiz", "21092017", teamList4);
+        Quiz testQuiz4 = new Quiz("Fourth quiz", "21092017", "10", "Earth", "Some fancy theme.", teamList4);
 
         List<Team> teamList5 = new ArrayList<>();
         teamList5.add(new Team("myTeam1", "13"));
         teamList5.add(new Team("myTeam2", "16"));
-        Quiz testQuiz5 = new Quiz("Fifth quiz", "21092017", teamList5);
+        Quiz testQuiz5 = new Quiz("Fifth quiz", "21092017", "10", "Earth", "Some fancy theme.", teamList5);
 
         List<Team> teamList6 = new ArrayList<>();
         teamList6.add(new Team("myTeam1", "11"));
         teamList6.add(new Team("myTeam2", "9"));
-        Quiz testQuiz6 = new Quiz("Sixth quiz", "21092017", teamList6);
+        Quiz testQuiz6 = new Quiz("Sixth quiz", "21092017", "10", "Earth", "Some fancy theme.", teamList6);
 
         db.child(testQuiz.getName()).setValue(testQuiz);
         db.child(testQuiz2.getName()).setValue(testQuiz2);
