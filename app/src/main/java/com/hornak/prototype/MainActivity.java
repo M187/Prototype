@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -76,13 +75,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void loadMyImage() {
-        Glide.with(this)
-                .load(mPhotoUrl)
-                .override(600, 600)
-                .fitCenter()
-                .into((ImageView) findViewById(R.id.fab));
-    }
+//    private void loadMyImage() {
+//        Glide.with(this)
+//                .load(mPhotoUrl)
+//                .override(600, 600)
+//                .fitCenter()
+//                .into((ImageView) findViewById(R.id.fab));
+//    }
 
     private void setUpFirebaseAdapter() {
 
