@@ -36,7 +36,7 @@
 
             <EditText
                 android:id="@+id/quiz_name_edit"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|top"
                 android:layout_marginBottom="15dp"
@@ -62,15 +62,17 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <EditText
+            <Button
                 android:id="@+id/quiz_date_edit"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|top"
                 android:layout_marginBottom="15dp"
-                android:layout_weight="1"
-                android:ems="10"
+                android:layout_weight="2"
+                android:background="@color/background_tint"
                 android:nextFocusForward="@+id/quiz_number_of_teams_edit"
+                android:onClick="invokeDatePicker"
+                android:text="Pick a date"
                 android:textSize="18sp" />
         </LinearLayout>
 
@@ -84,7 +86,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:gravity="start"
                 android:text="Pocet teamov (max):"
                 android:textSize="18sp"
@@ -92,7 +94,7 @@
 
             <EditText
                 android:id="@+id/quiz_number_of_teams_edit"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|top"
                 android:layout_marginBottom="15dp"
@@ -120,7 +122,7 @@
 
             <EditText
                 android:id="@+id/quiz_place_edit"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|top"
                 android:layout_marginBottom="15dp"
