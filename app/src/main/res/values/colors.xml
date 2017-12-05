@@ -40,4 +40,7 @@
 
     <color name="background_tint">#66FFFFFF</color>
 
+
+    <color name="black">#000</color>
+
 </resources>
