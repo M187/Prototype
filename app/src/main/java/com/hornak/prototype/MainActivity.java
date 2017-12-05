@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
         rlIcon1.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_black_24dp));
         rlIcon2.setImageDrawable(getResources().getDrawable(R.drawable.ic_share));
         rlIcon3.setImageDrawable(getResources().getDrawable(R.drawable.ic_share));
-        rlIcon4.setImageDrawable(getResources().getDrawable(R.drawable.ic_share));
+        rlIcon4.setImageDrawable(getResources().getDrawable(R.drawable.ic_cloud_upload_black_24dp));
 
         // Build the menu with default options: light theme, 90 degrees, 72dp radius.
         // Set 4 default SubActionButtons
@@ -152,6 +152,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), AddQuizActivity.class));
+            }
+        });
+
+        rlIcon4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                frbsHelper.makeTestData();
             }
         });
 

@@ -17,11 +17,24 @@ import static com.hornak.prototype.MainActivity.QUIZZES_KEY;
 
 public class AddQuizActivity extends AppCompatActivity {
 
+    EditText mName;
+    EditText mDate;
+    EditText mMaxTeams;
+    EditText mPlace;
+    EditText mTheme;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         this.setContentView(R.layout.activity_add_quiz);
+
+        mName = (EditText) findViewById(R.id.quiz_name_edit);
+        mDate = (EditText) findViewById(R.id.quiz_date_edit);
+        mMaxTeams = (EditText) findViewById(R.id.quiz_number_of_teams_edit);
+        mPlace = (EditText) findViewById(R.id.quiz_place_edit);
+        mTheme = (EditText) findViewById(R.id.quiz_theme_edit);
+
     }
 
     public void addQuiz(View view) {
@@ -30,15 +43,16 @@ public class AddQuizActivity extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         FirebaseHelper fbHelper = new FirebaseHelper(database.getReference(QUIZZES_KEY));
 
-        String name = ((EditText) view.findViewById(R.id.quiz_name_edit)).getText().toString();
-        String date = ((EditText) view.findViewById(R.id.quiz_date_edit)).getText().toString();
-        String noOfTeams = ((EditText) view.findViewById(R.id.quiz_number_of_teams_edit)).getText().toString();
-        String place = ((EditText) view.findViewById(R.id.quiz_name_edit)).getText().toString();
-        String theme = ((EditText) view.findViewById(R.id.quiz_name_edit)).getText().toString();
+        String name = mName.getText().toString();
+        String date = mDate.toString();
+        String noOfTeams = mMaxTeams.getText().toString();
+        String place = mPlace.getText().toString();
+        String theme = mTheme.toString();
 
         //todo: initialize listOfTeams?
         Quiz newQuiz = new Quiz(name, date, noOfTeams, place, theme, null);
 
+        //Quiz newQuiz = new Quiz("toTest", "heute", "2", "Earth", "Andoid", null);
         //todo - validations
 
         fbHelper.save(newQuiz);
