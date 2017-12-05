@@ -4,19 +4,19 @@ import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.hornak.prototype.model.quizzes.Quiz;
 import com.hornak.prototype.ui.DynamicHeightNetworkImageView;
@@ -28,10 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String QUIZZES_KEY = "QUIZZES_NODE";
 
-    FirebaseRecyclerAdapter mFirebaseAdapter;
-    private RecyclerView mRecyclerView;
     private FirebaseHelper frbsHelper;
-    private DatabaseReference firebaseDBRef;
 
     // Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
@@ -58,48 +55,52 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        }
 
-        //Recycler view
         setContentView(R.layout.activity_main);
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
-        setupFab();
+        frbsHelper = new FirebaseHelper(FirebaseDatabase.getInstance().getReference(QUIZZES_KEY));
 
-        //Firebase database
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        firebaseDBRef = database.getReference(QUIZZES_KEY);
-        frbsHelper = new FirebaseHelper(firebaseDBRef);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        setUpFirebaseAdapter();
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        tabLayout.addTab(tabLayout.newTab().setText("Pripravujeme"));
+        tabLayout.addTab(tabLayout.newTab().setText("Historia"));
+
+        //replace default fragment
+        replaceFragment(new PendingQuizFragment());
+
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if (tab.getPosition() == 0) {
+                    replaceFragment(new PendingQuizFragment());
+                } else if (tab.getPosition() == 1) {
+                    replaceFragment(new PastQuizFragment());
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
         if (savedInstanceState == null) {
             //refresh();
         }
+
+        setupFab();
     }
 
-//    private void loadMyImage() {
-//        Glide.with(this)
-//                .load(mPhotoUrl)
-//                .override(600, 600)
-//                .fitCenter()
-//                .into((ImageView) findViewById(R.id.fab));
-//    }
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
 
-    private void setUpFirebaseAdapter() {
-
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<Quiz, QuizViewHolder>(Quiz.class, R.layout.main_list_item, QuizViewHolder.class, firebaseDBRef) {
-
-            @Override
-            protected void populateViewHolder(QuizViewHolder viewHolder, Quiz model, int position) {
-                viewHolder.bindView(model);
-            }
-        };
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        mRecyclerView.setAdapter(mFirebaseAdapter);
-    }
-
-    public void sendNewData(View view) {
-        frbsHelper.makeTestData();
-        Toast.makeText(this, "Sent data to DB!", Toast.LENGTH_LONG).show();
+        transaction.commit();
     }
 
     @Override
@@ -217,6 +218,4 @@ public class MainActivity extends AppCompatActivity {
             view.getContext().startActivity(temp);
         }
     }
-
-
 }

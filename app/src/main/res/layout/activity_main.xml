@@ -6,11 +6,24 @@
     android:backgroundTint="@color/background_tint"
     android:backgroundTintMode="src_over">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
+
+    <LinearLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:background="@color/primary_text"
+            app:tabIndicatorHeight="10dp"
+            app:tabSelectedTextColor="@color/cardview_light_background"
+            app:tabTextColor="@color/divider" />
+    </LinearLayout>
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/toolbar_container"
@@ -31,23 +44,14 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
-                android:layout_gravity="bottom"
+                android:layout_gravity="top"
                 android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:contentInsetStart="72dp"
                 app:layout_collapseMode="pin"
-                app:navigationIcon="@drawable/header_logo_image"/>
+                app:navigationIcon="@drawable/header_logo_image" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
-
-    <!--<android.support.design.widget.FloatingActionButton-->
-    <!--android:id="@+id/fab"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_gravity="bottom|end"-->
-
-    <!--app:srcCompat="@mipmap/ic_settings_white_24dp" />-->
-
 </android.support.design.widget.CoordinatorLayout>
