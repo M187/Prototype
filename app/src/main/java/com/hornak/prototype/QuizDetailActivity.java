@@ -22,6 +22,13 @@ public class QuizDetailActivity extends AppCompatActivity {
     TextView quizName;
     @BindView(R.id.teams_placeholder)
     LinearLayout teamsPlaceholder;
+    @BindView(R.id.quiz_date)
+    TextView quizDate;
+    @BindView(R.id.quiz_theme)
+    TextView quizTheme;
+    @BindView(R.id.quiz_place)
+    TextView quizPlace;
+
     View quizTeamLayout;
 
     private Quiz quiz;
@@ -35,11 +42,14 @@ public class QuizDetailActivity extends AppCompatActivity {
         Bundle data = getIntent().getExtras();
         this.quiz = data.getParcelable("QUIZ");
         quizName.setText(quiz.getName());
+        quizDate.setText("Datum: ".concat(quiz.getTimestamp()));
+        quizTheme.setText("Tema: ".concat(quiz.getTheme()));
+        quizPlace.setText("Miesto: ".concat(quiz.getPlace()));
 
-        for (Team team : quiz.getTeams()){
+        for (Team team : quiz.getTeams()) {
             quizTeamLayout = getLayoutInflater().inflate(R.layout.team_line, teamsPlaceholder, false);
-            ((TextView)quizTeamLayout.findViewById(R.id.team_name)).setText(team.getName());
-            ((TextView)quizTeamLayout.findViewById(R.id.team_points)).setText(team.getPointsAchieved());
+            ((TextView) quizTeamLayout.findViewById(R.id.team_name)).setText(team.getName());
+            ((TextView) quizTeamLayout.findViewById(R.id.team_points)).setText(team.getPointsAchieved());
             teamsPlaceholder.addView(quizTeamLayout);
         }
     }
