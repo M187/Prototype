@@ -27,6 +27,7 @@ import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 public class MainActivity extends AppCompatActivity {
 
     public static final String QUIZZES_KEY = "QUIZZES_NODE";
+    public static final String DATE_FORMAT = "DD-MMM-YYYY";
 
     private FirebaseHelper frbsHelper;
 

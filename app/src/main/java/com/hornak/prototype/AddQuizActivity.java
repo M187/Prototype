@@ -13,8 +13,11 @@ import android.widget.Toast;
 import com.google.firebase.database.FirebaseDatabase;
 import com.hornak.prototype.model.quizzes.Quiz;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import static com.hornak.prototype.MainActivity.DATE_FORMAT;
 import static com.hornak.prototype.MainActivity.QUIZZES_KEY;
 
 /**
@@ -64,25 +67,24 @@ public class AddQuizActivity extends AppCompatActivity {
     }
 
     public void addQuiz(View view) {
-
         //Firebase database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         FirebaseHelper fbHelper = new FirebaseHelper(database.getReference(QUIZZES_KEY));
 
-        String name = mName.getText().toString();
-        String date = mDate.getText().toString();
-        String noOfTeams = mMaxTeams.getText().toString();
-        String place = mPlace.getText().toString();
-        String theme = mTheme.toString();
+        try {
+            String name = mName.getText().toString();
+            String date = (new SimpleDateFormat(DATE_FORMAT)).format((new SimpleDateFormat("DD/MM/YYYY")).parse(mDate.getText().toString()));
+            String noOfTeams = mMaxTeams.getText().toString();
+            String place = mPlace.getText().toString();
+            String theme = mTheme.toString();
+            Quiz newQuiz = new Quiz(name, date, noOfTeams, place, theme, null);
 
-        //todo: initialize listOfTeams?
-        Quiz newQuiz = new Quiz(name, date, noOfTeams, place, theme, null);
-
-        //Quiz newQuiz = new Quiz("toTest", "heute", "2", "Earth", "Andoid", null);
-        //todo - validations
-
-        fbHelper.save(newQuiz);
-        Toast.makeText(getApplicationContext(), "Entry succ. added!", Toast.LENGTH_LONG);
+            fbHelper.save(newQuiz);
+            Toast.makeText(getApplicationContext(), "Entry succ. added!", Toast.LENGTH_LONG);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), "Daco zle, skontroluj data!", Toast.LENGTH_LONG);
+        }
     }
 
     public void invokeDatePicker(View view) {
