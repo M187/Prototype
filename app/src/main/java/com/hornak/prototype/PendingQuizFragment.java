@@ -1,17 +1,21 @@
 package com.hornak.prototype;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.hornak.prototype.model.quizzes.Quiz;
+import com.hornak.prototype.ui.DynamicHeightNetworkImageView;
 
 import static com.hornak.prototype.MainActivity.QUIZZES_KEY;
 
@@ -43,15 +47,47 @@ public class PendingQuizFragment extends Fragment {
 
     private void setUpFirebaseAdapter() {
 
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<Quiz, MainActivity.QuizViewHolder>(Quiz.class, R.layout.main_list_item, MainActivity.QuizViewHolder.class, firebaseDBRef) {
+        mFirebaseAdapter = new FirebaseRecyclerAdapter<Quiz, QuizViewHolder>(Quiz.class, R.layout.main_list_item, QuizViewHolder.class, firebaseDBRef) {
 
             @Override
-            protected void populateViewHolder(MainActivity.QuizViewHolder viewHolder, Quiz model, int position) {
+            protected void populateViewHolder(QuizViewHolder viewHolder, Quiz model, int position) {
                 viewHolder.bindView(model);
             }
         };
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mRecyclerView.setAdapter(mFirebaseAdapter);
+    }
+
+    public static class QuizViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        DynamicHeightNetworkImageView thumbnailView;
+        TextView titleView;
+        TextView subtitleView;
+        Quiz mQuiz;
+
+        public QuizViewHolder(View view) {
+            super(view);
+            thumbnailView = (DynamicHeightNetworkImageView) view.findViewById(R.id.thumbnail);
+            titleView = (TextView) view.findViewById(R.id.article_title);
+            subtitleView = (TextView) view.findViewById(R.id.article_subtitle);
+            view.setOnClickListener(this);
+        }
+
+        public void bindView(Quiz quiz) {
+            mQuiz = quiz;
+            this.titleView.setText(quiz.getName());
+            this.subtitleView.setText(
+                    DateUtils.getRelativeTimeSpanString(
+                            System.currentTimeMillis(), DateUtils.HOUR_IN_MILLIS,
+                            DateUtils.FORMAT_ABBREV_ALL).toString());
+        }
+
+        @Override
+        public void onClick(View view) {
+            Intent temp = new Intent(view.getContext(), PendingQuizDetailActivity.class);
+            this.getLayoutPosition();
+            temp.putExtra("QUIZ", mQuiz);
+            view.getContext().startActivity(temp);
+        }
     }
 }

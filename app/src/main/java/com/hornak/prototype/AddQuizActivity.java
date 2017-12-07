@@ -13,7 +13,6 @@ import android.widget.Toast;
 import com.google.firebase.database.FirebaseDatabase;
 import com.hornak.prototype.model.quizzes.Quiz;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -79,11 +78,18 @@ public class AddQuizActivity extends AppCompatActivity {
             String theme = mTheme.toString();
             Quiz newQuiz = new Quiz(name, date, noOfTeams, place, theme, null);
 
+            if (name == null | date == null | noOfTeams == null | place == null | theme == null) {
+                throw new Exception();
+            }
+            int noOfTeamsInt = Integer.parseInt(noOfTeams);
+
             fbHelper.save(newQuiz);
             Toast.makeText(getApplicationContext(), "Entry succ. added!", Toast.LENGTH_LONG);
-        } catch (ParseException e) {
+        } catch (NumberFormatException e) {
+            Toast.makeText(getApplicationContext(), "Pocet tymov musi byt cislo, nolem, prekontroluj data!", Toast.LENGTH_LONG);
+        } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(getApplicationContext(), "Daco zle, skontroluj data!", Toast.LENGTH_LONG);
+            Toast.makeText(getApplicationContext(), "Daco zle, nolem, prekontroluj data!", Toast.LENGTH_LONG);
         }
     }
 

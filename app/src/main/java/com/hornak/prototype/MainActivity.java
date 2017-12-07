@@ -8,18 +8,13 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
-import com.hornak.prototype.model.quizzes.Quiz;
-import com.hornak.prototype.ui.DynamicHeightNetworkImageView;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
@@ -188,35 +183,4 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public static class QuizViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        DynamicHeightNetworkImageView thumbnailView;
-        TextView titleView;
-        TextView subtitleView;
-        Quiz mQuiz;
-
-        public QuizViewHolder(View view) {
-            super(view);
-            thumbnailView = (DynamicHeightNetworkImageView) view.findViewById(R.id.thumbnail);
-            titleView = (TextView) view.findViewById(R.id.article_title);
-            subtitleView = (TextView) view.findViewById(R.id.article_subtitle);
-            view.setOnClickListener(this);
-        }
-
-        public void bindView(Quiz quiz) {
-            mQuiz = quiz;
-            this.titleView.setText(quiz.getName());
-            this.subtitleView.setText(
-                    DateUtils.getRelativeTimeSpanString(
-                            System.currentTimeMillis(), DateUtils.HOUR_IN_MILLIS,
-                            DateUtils.FORMAT_ABBREV_ALL).toString());
-        }
-
-        @Override
-        public void onClick(View view) {
-            Intent temp = new Intent(view.getContext(), QuizDetailActivity.class);
-            this.getLayoutPosition();
-            temp.putExtra("QUIZ", mQuiz);
-            view.getContext().startActivity(temp);
-        }
-    }
 }
