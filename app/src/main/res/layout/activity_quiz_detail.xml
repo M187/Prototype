@@ -26,38 +26,52 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@android:color/darker_gray" />
+            android:background="@android:color/darker_gray"
+            android:padding="5dp" />
 
-        <TextView
-            android:id="@+id/quiz_date"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:textColor="@color/secondary_text"
-            android:textSize="14sp" />
+            android:background="@color/background_tint"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/quiz_theme"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:textColor="@color/secondary_text"
-            android:textSize="14sp" />
+            <TextView
+                android:id="@+id/quiz_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:textColor="@color/secondary_text"
+                android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/quiz_place"
+            <TextView
+                android:id="@+id/quiz_theme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:textColor="@color/secondary_text"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/quiz_place"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:textColor="@color/secondary_text"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:textColor="@color/secondary_text"
-            android:textSize="14sp" />
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:padding="5dp" />
 
         <TextView
             android:id="@+id/scoreboard_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
-            android:paddingTop="20dp"
+            android:paddingTop="10dp"
             android:text="Zoznam teamov:"
             android:textSize="14sp" />
 
