@@ -33,6 +33,13 @@
 
         <activity android:name=".SignInActivity" />
 
+        <activity
+            android:name=".SignUpTeamActivity"
+            android:hardwareAccelerated="false"
+            android:label="Sign up"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+
     </application>
 
 </manifest>

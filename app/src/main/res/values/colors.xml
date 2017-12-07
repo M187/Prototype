@@ -42,5 +42,7 @@
 
 
     <color name="black">#000</color>
+    <color name="button_background">#75000000</color>
+    <color name="button_text">#80FFFFFF</color>
 
 </resources>

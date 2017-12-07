@@ -1,5 +1,6 @@
 package com.hornak.prototype;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -56,5 +57,13 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
             ((TextView) quizTeamLayout.findViewById(R.id.team_points)).setText(team.getPointsAchieved());
             teamsPlaceholder.addView(quizTeamLayout);
         }
+    }
+
+    public void signUpTeamClick(View view) {
+
+        //todo - validate if there is room
+
+        Intent temp = new Intent(this, SignUpTeamActivity.class);
+        startActivity(temp);
     }
 }
