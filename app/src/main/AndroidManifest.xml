@@ -23,6 +23,9 @@
             android:name=".QuizDetailActivity"
             android:parentActivityName=".MainActivity">
         </activity>
+
+        <activity android:name=".PendingQuizDetailActivity" />
+
         <activity
             android:name=".AddQuizActivity"
             android:parentActivityName=".MainActivity"
