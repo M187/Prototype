@@ -63,7 +63,7 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
 
         teamPlaceAvailability.setText(String.valueOf(quiz.getTeams().size()).concat("/").concat(quiz.getNoOfTeamsString()));
 
-        setupSignUpTeamButtonLogic();
+        checkSignUpTeamButtonLogic();
 
         setupTeams();
 
@@ -75,10 +75,15 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
         }
     }
 
-    private void setupSignUpTeamButtonLogic() {
+    private void checkSignUpTeamButtonLogic() {
+        if (quiz.getNoOfTeams() <= quiz.getTeams().size()) {
+            signUpTeamButton.setClickable(false);
+            signUpTeamButton.setText("Sry, fulka.");
+        } else {
+            signUpTeamButton.setClickable(true);
+            signUpTeamButton.setText("Add team");
+        }
 
-
-        //signUpTeamButton.setClickable(false);
     }
 
     private void setupTeams() {
@@ -89,6 +94,7 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot snapshot) {
                 quiz = snapshot.getValue(Quiz.class);
                 refreshQuizTeams();
+                checkSignUpTeamButtonLogic();
             }
 
             @Override
