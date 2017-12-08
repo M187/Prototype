@@ -66,6 +66,7 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
     public void signUpTeamClick(View view) {
         //todo - validate if there is room
         Intent temp = new Intent(this, SignUpTeamActivity.class);
+        temp.putExtra("QUIZ", this.quiz);
         startActivity(temp);
     }
 
