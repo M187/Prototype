@@ -11,30 +11,25 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/MyStyle">
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".QuizDetailActivity"
             android:parentActivityName=".MainActivity">
         </activity>
-
         <activity android:name=".PendingQuizDetailActivity" />
-
         <activity
             android:name=".AddQuizActivity"
             android:parentActivityName=".MainActivity"
             android:windowSoftInputMode="stateVisible|adjustResize" />
-
         <activity android:name=".SignInActivity" />
-
         <activity
-            android:name=".SignUpTeamActivity"
+            android:name=".PendingQuizDetailActivity$SignUpTeamActivity"
             android:hardwareAccelerated="false"
             android:label="Sign up"
             android:screenOrientation="portrait"

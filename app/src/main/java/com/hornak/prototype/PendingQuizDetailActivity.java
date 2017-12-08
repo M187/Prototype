@@ -4,10 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.hornak.prototype.model.quizzes.Quiz;
 import com.hornak.prototype.model.quizzes.Team;
 
@@ -35,6 +41,8 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
     TextView quizPlace;
     @BindView((R.id.team_place_availability))
     TextView teamPlaceAvailability;
+    @BindView(R.id.sign_up_team)
+    Button signUpTeamButton;
 
     View quizTeamLayout;
 
@@ -55,12 +63,38 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
 
         teamPlaceAvailability.setText(String.valueOf(quiz.getTeams().size()).concat("/").concat(quiz.getNoOfTeams()));
 
+        setupSignUpTeamButtonLogic();
+
+        setupTeams();
+
         for (Team team : quiz.getTeams()) {
             quizTeamLayout = getLayoutInflater().inflate(R.layout.team_line, teamsPlaceholder, false);
             ((TextView) quizTeamLayout.findViewById(R.id.team_name)).setText(team.getName());
             ((TextView) quizTeamLayout.findViewById(R.id.team_points)).setText(team.getPointsAchieved());
             teamsPlaceholder.addView(quizTeamLayout);
         }
+    }
+
+    private void setupSignUpTeamButtonLogic() {
+
+        
+        //signUpTeamButton.setClickable(false);
+    }
+
+    private void setupTeams() {
+        DatabaseReference databaseReference = (FirebaseDatabase.getInstance().getReference(QUIZZES_KEY_FUTURE.concat("/").concat(quiz.getName())));
+        databaseReference.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                quiz = snapshot.getValue(Quiz.class);
+                refreshQuizTeams();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
     }
 
     public void signUpTeamClick(View view) {
@@ -77,5 +111,37 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
         FirebaseHelper fbHelper2 = new FirebaseHelper(database.getReference(QUIZZES_KEY_PAST));
         fbHelper2.save(quiz);
         this.finish();
+    }
+
+    private void refreshQuizTeams() {
+        teamsPlaceholder.removeAllViews();
+        for (Team team : quiz.getTeams()) {
+            quizTeamLayout = getLayoutInflater().inflate(R.layout.team_line, teamsPlaceholder, false);
+            ((TextView) quizTeamLayout.findViewById(R.id.team_name)).setText(team.getName());
+            ((TextView) quizTeamLayout.findViewById(R.id.team_points)).setText(team.getPointsAchieved());
+            teamsPlaceholder.addView(quizTeamLayout);
+        }
+    }
+
+    public static class SignUpTeamActivity extends AppCompatActivity {
+
+        private Quiz quiz;
+        private EditText quizNameInput;
+
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            this.setContentView(R.layout.activity_sign_up_team);
+
+            this.quizNameInput = (EditText) findViewById(R.id.team_name);
+            Bundle data = getIntent().getExtras();
+            this.quiz = data.getParcelable("QUIZ");
+        }
+
+        public void addTeam(View view) {
+            quiz.getTeams().add(new Team(quizNameInput.getText().toString(), "0"));
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            database.getReference(QUIZZES_KEY_FUTURE).child(quiz.getName().concat("/teams")).setValue(this.quiz.getTeams());
+            this.finish();
+        }
     }
 }
