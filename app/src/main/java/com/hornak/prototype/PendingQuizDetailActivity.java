@@ -61,7 +61,7 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
         quizTheme.setText("Tema: ".concat(quiz.getTheme()));
         quizPlace.setText("Miesto: ".concat(quiz.getPlace()));
 
-        teamPlaceAvailability.setText(String.valueOf(quiz.getTeams().size()).concat("/").concat(quiz.getNoOfTeams()));
+        teamPlaceAvailability.setText(String.valueOf(quiz.getTeams().size()).concat("/").concat(quiz.getNoOfTeamsString()));
 
         setupSignUpTeamButtonLogic();
 
@@ -77,7 +77,7 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
 
     private void setupSignUpTeamButtonLogic() {
 
-        
+
         //signUpTeamButton.setClickable(false);
     }
 

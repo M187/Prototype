@@ -73,15 +73,14 @@ public class AddQuizActivity extends AppCompatActivity {
         try {
             String name = mName.getText().toString();
             String date = (new SimpleDateFormat(DATE_FORMAT)).format((new SimpleDateFormat("DD/MM/YYYY")).parse(mDate.getText().toString()));
-            String noOfTeams = mMaxTeams.getText().toString();
+            int noOfTeams = Integer.valueOf(mMaxTeams.getText().toString());
             String place = mPlace.getText().toString();
             String theme = mTheme.toString();
             Quiz newQuiz = new Quiz(name, date, noOfTeams, place, theme, true, null);
 
-            if (name == null | date == null | noOfTeams == null | place == null | theme == null) {
+            if (name == null | date == null | place == null | theme == null) {
                 throw new Exception();
             }
-            int noOfTeamsInt = Integer.parseInt(noOfTeams);
 
             fbHelper.save(newQuiz);
             Toast.makeText(getApplicationContext(), "Entry succ. added!", Toast.LENGTH_LONG);

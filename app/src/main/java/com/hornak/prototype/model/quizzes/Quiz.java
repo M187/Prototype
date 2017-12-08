@@ -27,7 +27,7 @@ public class Quiz implements Parcelable {
 
     public String name;
     public String timestamp;
-    public String noOfTeams;
+    public int noOfTeams;
     public String place;
     public String theme;
     public boolean isPending;
@@ -35,7 +35,7 @@ public class Quiz implements Parcelable {
 
     public Quiz(){}
 
-    public Quiz(String name, String timestamp, String noOfTeams, String place, String theme, boolean isPending, List<Team> teams) {
+    public Quiz(String name, String timestamp, int noOfTeams, String place, String theme, boolean isPending, List<Team> teams) {
         this.name = name;
         this.timestamp = timestamp;
         this.noOfTeams = noOfTeams;
@@ -48,7 +48,7 @@ public class Quiz implements Parcelable {
     public Quiz(Parcel in){
         this.name = in.readString();
         this.timestamp = in.readString();
-        this.noOfTeams = in.readString();
+        this.noOfTeams = in.readInt();
         this.place = in.readString();
         this.theme = in.readString();
         this.isPending = in.readByte() != 0;
@@ -60,8 +60,12 @@ public class Quiz implements Parcelable {
         return isPending;
     }
 
-    public String getNoOfTeams() {
+    public int getNoOfTeams() {
         return noOfTeams;
+    }
+
+    public String getNoOfTeamsString() {
+        return String.valueOf(this.noOfTeams);
     }
 
     public String getPlace() {
@@ -93,7 +97,7 @@ public class Quiz implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.name);
         dest.writeString(this.timestamp);
-        dest.writeString(this.noOfTeams);
+        dest.writeInt(this.noOfTeams);
         dest.writeString(this.place);
         dest.writeString(this.theme);
         dest.writeByte((byte) (isPending ? 1 : 0));
