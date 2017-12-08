@@ -17,7 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import static com.hornak.prototype.MainActivity.DATE_FORMAT;
-import static com.hornak.prototype.MainActivity.QUIZZES_KEY;
+import static com.hornak.prototype.MainActivity.QUIZZES_KEY_FUTURE;
 
 /**
  * Created by michal.hornak on 12/4/2017.
@@ -68,7 +68,7 @@ public class AddQuizActivity extends AppCompatActivity {
     public void addQuiz(View view) {
         //Firebase database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        FirebaseHelper fbHelper = new FirebaseHelper(database.getReference(QUIZZES_KEY));
+        FirebaseHelper fbHelper = new FirebaseHelper(database.getReference(QUIZZES_KEY_FUTURE));
 
         try {
             String name = mName.getText().toString();
@@ -76,7 +76,7 @@ public class AddQuizActivity extends AppCompatActivity {
             String noOfTeams = mMaxTeams.getText().toString();
             String place = mPlace.getText().toString();
             String theme = mTheme.toString();
-            Quiz newQuiz = new Quiz(name, date, noOfTeams, place, theme, null);
+            Quiz newQuiz = new Quiz(name, date, noOfTeams, place, theme, true, null);
 
             if (name == null | date == null | noOfTeams == null | place == null | theme == null) {
                 throw new Exception();

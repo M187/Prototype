@@ -17,13 +17,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.hornak.prototype.model.quizzes.Quiz;
 import com.hornak.prototype.ui.DynamicHeightNetworkImageView;
 
-import static com.hornak.prototype.MainActivity.QUIZZES_KEY;
+import static com.hornak.prototype.MainActivity.QUIZZES_KEY_FUTURE;
 
 /**
  * Created by michal.hornak on 12/5/2017.
  */
 
-public class PendingQuizFragment extends Fragment {
+public class FutureQuizFragment extends Fragment {
 
 
     FirebaseRecyclerAdapter mFirebaseAdapter;
@@ -38,7 +38,7 @@ public class PendingQuizFragment extends Fragment {
 
         //Firebase database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        firebaseDBRef = database.getReference(QUIZZES_KEY);
+        firebaseDBRef = database.getReference(QUIZZES_KEY_FUTURE);
         frbsHelper = new FirebaseHelper(firebaseDBRef);
 
         setUpFirebaseAdapter();

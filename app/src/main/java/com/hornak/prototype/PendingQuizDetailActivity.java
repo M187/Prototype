@@ -7,11 +7,15 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.database.FirebaseDatabase;
 import com.hornak.prototype.model.quizzes.Quiz;
 import com.hornak.prototype.model.quizzes.Team;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.hornak.prototype.MainActivity.QUIZZES_KEY_FUTURE;
+import static com.hornak.prototype.MainActivity.QUIZZES_KEY_PAST;
 
 /**
  * Created by michal.hornak on 11/28/2017.
@@ -60,10 +64,17 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
     }
 
     public void signUpTeamClick(View view) {
-
         //todo - validate if there is room
-
         Intent temp = new Intent(this, SignUpTeamActivity.class);
         startActivity(temp);
+    }
+
+    public void moveToDone(View view) {
+        quiz.isPending = false;
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        database.getReference(QUIZZES_KEY_FUTURE).child(quiz.getName()).removeValue();
+        FirebaseHelper fbHelper2 = new FirebaseHelper(database.getReference(QUIZZES_KEY_PAST));
+        fbHelper2.save(quiz);
+        this.finish();
     }
 }

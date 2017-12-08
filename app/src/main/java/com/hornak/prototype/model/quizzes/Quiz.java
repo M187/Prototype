@@ -30,16 +30,18 @@ public class Quiz implements Parcelable {
     public String noOfTeams;
     public String place;
     public String theme;
+    public boolean isPending;
     public List<Team> teams;
 
     public Quiz(){}
 
-    public Quiz(String name, String timestamp, String noOfTeams, String place, String theme, List<Team> teams) {
+    public Quiz(String name, String timestamp, String noOfTeams, String place, String theme, boolean isPending, List<Team> teams) {
         this.name = name;
         this.timestamp = timestamp;
         this.noOfTeams = noOfTeams;
         this.place = place;
         this.theme = theme;
+        this.isPending = isPending;
         this.teams = teams;
     }
 
@@ -49,8 +51,13 @@ public class Quiz implements Parcelable {
         this.noOfTeams = in.readString();
         this.place = in.readString();
         this.theme = in.readString();
+        this.isPending = in.readByte() != 0;
         this.teams = new ArrayList<>();
         in.readTypedList(teams, Team.CREATOR);
+    }
+
+    public boolean isPending() {
+        return isPending;
     }
 
     public String getNoOfTeams() {
@@ -89,6 +96,7 @@ public class Quiz implements Parcelable {
         dest.writeString(this.noOfTeams);
         dest.writeString(this.place);
         dest.writeString(this.theme);
+        dest.writeByte((byte) (isPending ? 1 : 0));
         dest.writeTypedList(this.teams);
     }
 }

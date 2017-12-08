@@ -22,6 +22,10 @@ import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 public class MainActivity extends AppCompatActivity {
 
     public static final String QUIZZES_KEY = "QUIZZES_NODE";
+
+    public static final String QUIZZES_KEY_FUTURE = "QUIZZES_NODE_FUTURE";
+    public static final String QUIZZES_KEY_PAST = "QUIZZES_NODE_PAST";
+
     public static final String DATE_FORMAT = "DD-MMM-YYYY";
 
     private FirebaseHelper frbsHelper;
@@ -53,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        frbsHelper = new FirebaseHelper(FirebaseDatabase.getInstance().getReference(QUIZZES_KEY));
+        frbsHelper = new FirebaseHelper(FirebaseDatabase.getInstance().getReference(QUIZZES_KEY_FUTURE));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -64,13 +68,13 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText("Historia"));
 
         //replace default fragment
-        replaceFragment(new PendingQuizFragment());
+        replaceFragment(new FutureQuizFragment());
 
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getPosition() == 0) {
-                    replaceFragment(new PendingQuizFragment());
+                    replaceFragment(new FutureQuizFragment());
                 } else if (tab.getPosition() == 1) {
                     replaceFragment(new PastQuizFragment());
                 }
