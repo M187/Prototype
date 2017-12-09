@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,26 +16,25 @@ import android.widget.ImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
+import com.hornak.prototype.ui.FadingImageViewHandler;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
-public class MainActivity extends AppCompatActivity {
-
-    public static final String QUIZZES_KEY = "QUIZZES_NODE";
+public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
 
     public static final String QUIZZES_KEY_FUTURE = "QUIZZES_NODE_FUTURE";
     public static final String QUIZZES_KEY_PAST = "QUIZZES_NODE_PAST";
-
     public static final String DATE_FORMAT = "DD-MMM-YYYY";
-
+    AppBarLayout appBarLayout;
+    ImageView mPhotoView;
     private FirebaseHelper frbsHelper;
-
     // Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
     private String mUsername;
     private String mPhotoUrl;
+    private FadingImageViewHandler fadingImageViewHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +56,10 @@ public class MainActivity extends AppCompatActivity {
 //        }
 
         setContentView(R.layout.activity_main);
+        mPhotoView = (ImageView) findViewById(R.id.photo_toolbar);
+        appBarLayout = (AppBarLayout) findViewById(R.id.toolbar_container);
+        fadingImageViewHandler = new FadingImageViewHandler(this.mPhotoView);
+        this.appBarLayout.addOnOffsetChangedListener(this);
 
         frbsHelper = new FirebaseHelper(FirebaseDatabase.getInstance().getReference(QUIZZES_KEY_FUTURE));
 
@@ -93,6 +97,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         setupFab();
+    }
+
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+        int maxScroll = appBarLayout.getTotalScrollRange();
+        float percentage = (float) Math.abs(verticalOffset) / (float) maxScroll;
+
+        fadingImageViewHandler.handleScrolling(percentage);
     }
 
     private void replaceFragment(Fragment fragment) {
