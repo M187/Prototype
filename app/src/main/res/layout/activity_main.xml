@@ -14,15 +14,7 @@
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tab_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:background="@color/button_background"
-            app:tabIndicatorHeight="10dp"
-            app:tabSelectedTextColor="@color/cardview_light_background"
-            app:tabTextColor="@color/divider" />
+
     </LinearLayout>
 
     <android.support.design.widget.AppBarLayout
@@ -59,6 +51,16 @@
                 app:contentInsetStart="72dp"
                 app:layout_collapseMode="pin"
                 app:navigationIcon="@drawable/header_logo_image" />
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="@color/button_background"
+                app:tabIndicatorHeight="10dp"
+                app:tabSelectedTextColor="@color/cardview_light_background"
+                app:tabTextColor="@color/divider" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
