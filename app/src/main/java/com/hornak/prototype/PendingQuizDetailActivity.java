@@ -61,7 +61,7 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
         quizTheme.setText("Tema: ".concat(quiz.getTheme()));
         quizPlace.setText("Miesto: ".concat(quiz.getPlace()));
 
-        teamPlaceAvailability.setText(String.valueOf(quiz.getTeams().size()).concat("/").concat(quiz.getNoOfTeamsString()));
+        teamPlaceAvailability.setText(String.valueOf(quiz.getTeams().size()).concat("/").concat(String.valueOf(quiz.getNoOfTeams())));
 
         checkSignUpTeamButtonLogic();
 
@@ -121,11 +121,14 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
 
     private void refreshQuizTeams() {
         teamsPlaceholder.removeAllViews();
-        for (Team team : quiz.getTeams()) {
-            quizTeamLayout = getLayoutInflater().inflate(R.layout.team_line, teamsPlaceholder, false);
-            ((TextView) quizTeamLayout.findViewById(R.id.team_name)).setText(team.getName());
-            ((TextView) quizTeamLayout.findViewById(R.id.team_points)).setText(team.getPointsAchieved());
-            teamsPlaceholder.addView(quizTeamLayout);
+        try {
+            for (Team team : quiz.getTeams()) {
+                quizTeamLayout = getLayoutInflater().inflate(R.layout.team_line, teamsPlaceholder, false);
+                ((TextView) quizTeamLayout.findViewById(R.id.team_name)).setText(team.getName());
+                ((TextView) quizTeamLayout.findViewById(R.id.team_points)).setText(team.getPointsAchieved());
+                teamsPlaceholder.addView(quizTeamLayout);
+            }
+        } catch (NullPointerException e) {
         }
     }
 

@@ -10,7 +10,7 @@
     <dimen name="fab_press_translation_z">6dp</dimen>
     <dimen name="fab_margin">24dp</dimen>
 
-    <dimen name="toolbar_max_height">112dp</dimen>
+    <dimen name="toolbar_max_height">172dp</dimen>
 
 
     <!-- Default screen margins, per the Android Design guidelines. -->

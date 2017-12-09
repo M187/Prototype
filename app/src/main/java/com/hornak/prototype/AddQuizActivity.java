@@ -12,8 +12,10 @@ import android.widget.Toast;
 
 import com.google.firebase.database.FirebaseDatabase;
 import com.hornak.prototype.model.quizzes.Quiz;
+import com.hornak.prototype.model.quizzes.Team;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import static com.hornak.prototype.MainActivity.DATE_FORMAT;
@@ -75,8 +77,8 @@ public class AddQuizActivity extends AppCompatActivity {
             String date = (new SimpleDateFormat(DATE_FORMAT)).format((new SimpleDateFormat("DD/MM/YYYY")).parse(mDate.getText().toString()));
             int noOfTeams = Integer.valueOf(mMaxTeams.getText().toString());
             String place = mPlace.getText().toString();
-            String theme = mTheme.toString();
-            Quiz newQuiz = new Quiz(name, date, noOfTeams, place, theme, true, null);
+            String theme = mTheme.getText().toString();
+            Quiz newQuiz = new Quiz(name, date, noOfTeams, place, theme, true, new ArrayList<Team>());
 
             if (name == null | date == null | place == null | theme == null) {
                 throw new Exception();
@@ -84,6 +86,7 @@ public class AddQuizActivity extends AppCompatActivity {
 
             fbHelper.save(newQuiz);
             Toast.makeText(getApplicationContext(), "Entry succ. added!", Toast.LENGTH_LONG);
+            this.finish();
         } catch (NumberFormatException e) {
             Toast.makeText(getApplicationContext(), "Pocet tymov musi byt cislo, nolem, prekontroluj data!", Toast.LENGTH_LONG);
         } catch (Exception e) {

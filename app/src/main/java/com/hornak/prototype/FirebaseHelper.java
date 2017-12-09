@@ -31,7 +31,8 @@ public class FirebaseHelper {
             saved = false;
         } else {
             try {
-                db.push().setValue(quiz);
+                //db.push().setValue(quiz);
+                db.child(quiz.getName()).setValue(quiz);
                 saved = true;
             } catch (DatabaseException e) {
                 e.printStackTrace();

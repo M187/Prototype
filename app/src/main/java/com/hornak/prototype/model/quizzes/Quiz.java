@@ -31,7 +31,7 @@ public class Quiz implements Parcelable {
     public String place;
     public String theme;
     public boolean isPending;
-    public List<Team> teams;
+    public List<Team> teams = new ArrayList<>();
 
     public Quiz(){}
 
@@ -56,16 +56,8 @@ public class Quiz implements Parcelable {
         in.readTypedList(teams, Team.CREATOR);
     }
 
-    public boolean isPending() {
-        return isPending;
-    }
-
     public int getNoOfTeams() {
         return noOfTeams;
-    }
-
-    public String getNoOfTeamsString() {
-        return String.valueOf(this.noOfTeams);
     }
 
     public String getPlace() {
