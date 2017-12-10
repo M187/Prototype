@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
         setContentView(R.layout.activity_main);
         mPhotoView = (ImageView) findViewById(R.id.photo_toolbar);
         appBarLayout = (AppBarLayout) findViewById(R.id.toolbar_container);
-        fadingImageViewHandler = new FadingImageViewHandler(this.mPhotoView);
+        fadingImageViewHandler = new FadingImageViewHandler(this.mPhotoView, (Toolbar) findViewById(R.id.toolbar));
         this.appBarLayout.addOnOffsetChangedListener(this);
 
         frbsHelper = new FirebaseHelper(FirebaseDatabase.getInstance().getReference(QUIZZES_KEY_FUTURE));

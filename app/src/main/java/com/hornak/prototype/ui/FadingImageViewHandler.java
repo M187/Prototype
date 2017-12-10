@@ -1,10 +1,13 @@
 package com.hornak.prototype.ui;
 
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.ImageView;
+
+import com.hornak.prototype.R;
 
 /**
  * Created by michal.hornak on 12/9/2017.
@@ -13,19 +16,23 @@ import android.widget.ImageView;
 public class FadingImageViewHandler {
 
     ImageView mImageView;
+    Toolbar mToolbar;
     private boolean isTitleImageShown;
 
-    public FadingImageViewHandler(ImageView imageView) {
+    public FadingImageViewHandler(ImageView imageView, Toolbar toolbar) {
         mImageView = imageView;
+        mToolbar = toolbar;
     }
 
     public void handleScrolling(float percentage) {
         try {
             if (percentage > 0.7f && this.isTitleImageShown) {
                 fadeOutAndHideImage(mImageView);
+                mToolbar.setNavigationIcon(null);
                 this.isTitleImageShown = false;
             } else if (percentage < 0.7f && !this.isTitleImageShown) {
                 fadeInAndHideImage(mImageView);
+                mToolbar.setNavigationIcon(R.drawable.logo_quiz);
                 this.isTitleImageShown = true;
             }
         } catch (NullPointerException e) {
