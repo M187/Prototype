@@ -33,5 +33,10 @@
 
     </style>
 
+    <style name="myDialog" parent="MyStyle">
+        <item name="android:windowNoTitle">true</item>
+        ...
+    </style>
+
 
 </resources>

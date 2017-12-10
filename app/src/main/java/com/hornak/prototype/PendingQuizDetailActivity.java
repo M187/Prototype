@@ -1,8 +1,11 @@
 package com.hornak.prototype;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -113,6 +116,29 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
     }
 
     public void moveToDone(View view) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.myDialog));
+        builder.setCancelable(true);
+        builder.setTitle("Title");
+        builder.setMessage("Message");
+        builder.setPositiveButton("Confirm",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        moveQuizToDone();
+                    }
+                });
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void moveQuizToDone() {
         quiz.isPending = false;
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         database.getReference(QUIZZES_KEY_FUTURE).child(quiz.getName()).removeValue();
