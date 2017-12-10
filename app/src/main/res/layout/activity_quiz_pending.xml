@@ -38,14 +38,14 @@
 
 
                 <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
                     android:layout_gravity="end"
-                    android:layout_weight="10"
-                    android:background="@color/button_background"
+                    android:background="@drawable/button_action"
+                    android:drawableTop="@drawable/ic_check_black_24dp"
                     android:elevation="@dimen/button_elevation"
                     android:onClick="moveToDone"
-                    android:text="CHECK"
+                    android:paddingTop="13dp"
                     android:textColor="@color/button_text"
                     android:textStyle="bold" />
 
