@@ -76,14 +76,16 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
     }
 
     private void checkSignUpTeamButtonLogic() {
-        if (quiz.getNoOfTeams() <= quiz.getTeams().size()) {
-            signUpTeamButton.setClickable(false);
-            signUpTeamButton.setText("Sry, fulka.");
-        } else {
-            signUpTeamButton.setClickable(true);
-            signUpTeamButton.setText("Add team");
+        try {
+            if (quiz.getNoOfTeams() <= quiz.getTeams().size()) {
+                signUpTeamButton.setClickable(false);
+                signUpTeamButton.setText("Sry, fulka.");
+            } else {
+                signUpTeamButton.setClickable(true);
+                signUpTeamButton.setText("Add team");
+            }
+        } catch (NullPointerException e) {
         }
-
     }
 
     private void setupTeams() {
