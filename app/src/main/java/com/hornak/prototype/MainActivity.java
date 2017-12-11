@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Pripravujeme"));
         tabLayout.addTab(tabLayout.newTab().setText("Historia"));
+        tabLayout.addTab(tabLayout.newTab().setText("Liga"));
 
         //replace default fragment
         replaceFragment(new FutureQuizFragment());
@@ -81,6 +82,8 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
                     replaceFragment(new FutureQuizFragment());
                 } else if (tab.getPosition() == 1) {
                     replaceFragment(new PastQuizFragment());
+                } else if (tab.getPosition() == 2) {
+                    replaceFragment(new LeagueFragment());
                 }
             }
 
