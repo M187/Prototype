@@ -65,7 +65,7 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
         quizTheme.setText("Tema: ".concat(quiz.getTheme()));
         quizPlace.setText("Miesto: ".concat(quiz.getPlace()));
 
-        teamPlaceAvailability.setText(String.valueOf(quiz.getTeams().size()).concat("/").concat(String.valueOf(quiz.getNoOfTeams())));
+
 
         checkSignUpTeamButtonLogic();
 
@@ -81,6 +81,7 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
 
     private void checkSignUpTeamButtonLogic() {
         try {
+            teamPlaceAvailability.setText(String.valueOf(quiz.getTeams().size()).concat("/").concat(String.valueOf(quiz.getNoOfTeams())));
             if (quiz.getNoOfTeams() <= quiz.getTeams().size()) {
                 signUpTeamButton.setClickable(false);
                 signUpTeamButton.setText("Sry, fulka.");
@@ -188,10 +189,28 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
         }
 
         public void addTeam(View view) {
-            quiz.getTeams().add(new Team(quizNameInput.getText().toString(), "0"));
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            database.getReference(QUIZZES_KEY_FUTURE).child(quiz.getName().concat("/teams")).setValue(this.quiz.getTeams());
-            this.finish();
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.myDialog));
+            builder.setCancelable(true);
+            builder.setMessage("Prihlasit team?");
+            builder.setPositiveButton("Confirm",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            quiz.getTeams().add(new Team(quizNameInput.getText().toString(), "0"));
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            database.getReference(QUIZZES_KEY_FUTURE).child(quiz.getName().concat("/teams")).setValue(quiz.getTeams());
+                            finish();
+                        }
+                    });
+            builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
         }
     }
 }
