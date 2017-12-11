@@ -1,5 +1,6 @@
 package com.hornak.prototype;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -119,8 +120,7 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.myDialog));
         builder.setCancelable(true);
-        builder.setTitle("Title");
-        builder.setMessage("Message");
+        builder.setMessage("Presunut Quiz do DONE?");
         builder.setPositiveButton("Confirm",
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -139,11 +139,24 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
     }
 
     private void moveQuizToDone() {
-        quiz.isPending = false;
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        database.getReference(QUIZZES_KEY_FUTURE).child(quiz.getName()).removeValue();
-        FirebaseHelper fbHelper2 = new FirebaseHelper(database.getReference(QUIZZES_KEY_PAST));
-        fbHelper2.save(quiz);
+        final ProgressDialog pd = ProgressDialog.show(this, "", "Loading. Please wait...", true);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                quiz.isPending = false;
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                database.getReference(QUIZZES_KEY_FUTURE).child(quiz.getName()).removeValue();
+                FirebaseHelper fbHelper2 = new FirebaseHelper(database.getReference(QUIZZES_KEY_PAST));
+                fbHelper2.save(quiz);
+            }
+
+        }).start();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        pd.dismiss();
         this.finish();
     }
 
