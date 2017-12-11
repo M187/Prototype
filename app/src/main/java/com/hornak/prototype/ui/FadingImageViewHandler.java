@@ -7,8 +7,6 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.ImageView;
 
-import com.hornak.prototype.R;
-
 /**
  * Created by michal.hornak on 12/9/2017.
  */
@@ -28,11 +26,11 @@ public class FadingImageViewHandler {
         try {
             if (percentage > 0.7f && this.isTitleImageShown) {
                 fadeOutAndHideImage(mImageView);
-                mToolbar.setNavigationIcon(null);
+                //mToolbar.setNavigationIcon(null);
                 this.isTitleImageShown = false;
             } else if (percentage < 0.7f && !this.isTitleImageShown) {
                 fadeInAndHideImage(mImageView);
-                mToolbar.setNavigationIcon(R.drawable.logo_quiz);
+                //mToolbar.setNavigationIcon(R.drawable.logo_quiz);
                 this.isTitleImageShown = true;
             }
         } catch (NullPointerException e) {
