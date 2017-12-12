@@ -21,13 +21,40 @@
             android:paddingStart="15dp"
             android:paddingTop="15dp">
 
-            <TextView
-                android:id="@+id/quiz_name"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:textSize="25sp"
-                android:textStyle="bold" />
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingBottom="5dp">
+
+                <TextView
+                    android:id="@+id/quiz_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:gravity="center_horizontal"
+                    android:text="......."
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/rating_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="@color/button_background"
+                    android:elevation="@dimen/button_elevation"
+                    android:onClick="rate"
+                    android:paddingEnd="10dp"
+                    android:paddingStart="10dp"
+                    android:text="RATE"
+                    android:textColor="@color/button_text"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"

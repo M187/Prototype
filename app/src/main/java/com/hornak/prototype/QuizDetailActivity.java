@@ -1,9 +1,12 @@
 package com.hornak.prototype;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.hornak.prototype.model.quizzes.Quiz;
@@ -52,5 +55,26 @@ public class QuizDetailActivity extends AppCompatActivity {
             ((TextView) quizTeamLayout.findViewById(R.id.team_points)).setText(team.getPointsAchieved());
             teamsPlaceholder.addView(quizTeamLayout);
         }
+    }
+
+    public void rate(View view) {
+        final Dialog rankDialog = new Dialog(this, R.style.myDialog);
+        rankDialog.setContentView(R.layout.rank_dialog);
+        rankDialog.setCancelable(true);
+        RatingBar ratingBar = (RatingBar) rankDialog.findViewById(R.id.dialog_ratingbar);
+        ratingBar.setRating(3);
+
+        TextView text = (TextView) rankDialog.findViewById(R.id.rank_dialog_text1);
+        //text.setText(name);
+
+        Button updateButton = (Button) rankDialog.findViewById(R.id.rank_dialog_button);
+        updateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rankDialog.dismiss();
+            }
+        });
+        //now that the dialog is set up, it's time to show it
+        rankDialog.show();
     }
 }

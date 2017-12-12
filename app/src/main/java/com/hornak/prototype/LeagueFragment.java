@@ -55,6 +55,10 @@ public class LeagueFragment extends Fragment {
 //        mRecyclerView.setAdapter(mFirebaseAdapter);
 //    }
 
+    private void createTeamEntry() {
+
+    }
+
     private class TeamStatistics implements Comparable {
 
         String mName;
