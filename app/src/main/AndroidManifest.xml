@@ -32,7 +32,7 @@
             android:name=".MainActivity$RegisterNewTeam"
             android:hardwareAccelerated="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Dialog" />
+            android:theme="@style/myDialog" />
 
         <activity
             android:name=".PendingQuizDetailActivity$SignUpTeamToQuizActivity"
