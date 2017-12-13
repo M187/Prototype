@@ -35,7 +35,10 @@
 
     <style name="myDialog" parent="MyStyle">
         <item name="android:windowNoTitle">true</item>
-        ...
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+
     </style>
 
 

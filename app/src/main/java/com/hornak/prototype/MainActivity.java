@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
 
     public static final String QUIZZES_KEY_FUTURE = "QUIZZES_NODE_FUTURE";
     public static final String QUIZZES_KEY_PAST = "QUIZZES_NODE_PAST";
+    public static final String QUIZZES_TEAMS = "QUIZZES_TEAMS";
     public static final String DATE_FORMAT = "DD-MMM-YYYY";
     AppBarLayout appBarLayout;
     ImageView mPhotoView;
