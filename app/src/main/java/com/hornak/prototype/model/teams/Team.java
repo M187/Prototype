@@ -23,23 +23,23 @@ public class Team implements Parcelable {
     };
 
     public String name;
-    public String ownerUID;
+    public String uid;
     public String ownerEmail;
     public int pointsAchieved;
 
     public Team() {
     }
 
-    public Team(String name, String ownerUID, String ownerEmail, int pointsAchieved) {
+    public Team(String name, String uid, String ownerEmail, int pointsAchieved) {
         this.name = name;
-        this.ownerUID = ownerUID;
+        this.uid = uid;
         this.ownerEmail = ownerEmail;
         this.pointsAchieved = pointsAchieved;
     }
 
     public Team(Parcel in) {
         this.name = in.readString();
-        this.ownerUID = in.readString();
+        this.uid = in.readString();
         this.ownerEmail = in.readString();
         this.pointsAchieved = in.readInt();
     }
@@ -48,8 +48,8 @@ public class Team implements Parcelable {
         return name;
     }
 
-    public String getOwnerUID() {
-        return ownerUID;
+    public String getUid() {
+        return uid;
     }
 
     public String getOwnerEmail() {
@@ -68,7 +68,7 @@ public class Team implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.name);
-        dest.writeString(this.ownerUID);
+        dest.writeString(this.uid);
         dest.writeString(this.ownerEmail);
         dest.writeInt(this.pointsAchieved);
     }

@@ -221,8 +221,8 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            this.setContentView(R.layout.activity_sign_up_team);
             requestWindowFeature(Window.FEATURE_NO_TITLE);
+            this.setContentView(R.layout.activity_sign_up_team);
         }
 
         public void addTeam(View view) {
