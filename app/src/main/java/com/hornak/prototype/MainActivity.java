@@ -2,15 +2,20 @@ package com.hornak.prototype;
 
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.Window;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,12 +32,12 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
     public static final String QUIZZES_KEY_PAST = "QUIZZES_NODE_PAST";
     public static final String QUIZZES_TEAMS = "QUIZZES_TEAMS";
     public static final String DATE_FORMAT = "DD-MMM-YYYY";
+    // Firebase instance variables
+    private static FirebaseAuth mFirebaseAuth;
+    private static FirebaseUser mFirebaseUser;
     AppBarLayout appBarLayout;
     ImageView mPhotoView;
     private FirebaseHelper frbsHelper;
-    // Firebase instance variables
-    private FirebaseAuth mFirebaseAuth;
-    private FirebaseUser mFirebaseUser;
     private String mUsername;
     private String mPhotoUrl;
     private FadingImageViewHandler fadingImageViewHandler;
@@ -152,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
 
         rlIcon1.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_black_24dp));
         rlIcon2.setImageDrawable(getResources().getDrawable(R.drawable.ic_share));
-        rlIcon3.setImageDrawable(getResources().getDrawable(R.drawable.ic_share));
+        rlIcon3.setImageDrawable(getResources().getDrawable(R.drawable.ic_team_add_black_24dp));
         rlIcon4.setImageDrawable(getResources().getDrawable(R.drawable.ic_cloud_upload_black_24dp));
 
         // Build the menu with default options: light theme, 90 degrees, 72dp radius.
@@ -172,13 +177,19 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
             }
         });
 
+        rlIcon3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), RegisterNewTeam.class));
+            }
+        });
+
         rlIcon4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 frbsHelper.makeTestData();
             }
         });
-
 
         // Listen menu open and close events to animate the button content view
         rightLowerMenu.setStateChangeListener(new FloatingActionMenu.MenuStateChangeListener() {
@@ -201,6 +212,47 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
                 animation.start();
             }
         });
+    }
+
+    public static class RegisterNewTeam extends AppCompatActivity {
+
+        com.hornak.prototype.model.teams.Team mTeam;
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            this.setContentView(R.layout.activity_sign_up_team);
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+        }
+
+        public void addTeam(View view) {
+
+            //Todo - UID hardcoded for now
+            //mTeam = new com.hornak.prototype.model.teams.Team(((EditText) findViewById(R.id.team_name)).getText().toString(), mFirebaseUser.getUid(), mFirebaseUser.getEmail(), 0);
+            mTeam = new com.hornak.prototype.model.teams.Team(((EditText) findViewById(R.id.team_name)).getText().toString(), "4b9f2ece-33e1-4f03-abda-b61e86c0f8ab", "some@gmail.com", 0);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.myDialog));
+            builder.setCancelable(true);
+            builder.setMessage("Registrovat team?");
+            builder.setPositiveButton("Registruj",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            database.getReference(QUIZZES_TEAMS).setValue(mTeam);
+                            finish();
+                        }
+                    });
+            builder.setNegativeButton("Nie", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+
     }
 
 }

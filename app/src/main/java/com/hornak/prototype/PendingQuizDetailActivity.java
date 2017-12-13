@@ -112,7 +112,7 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
 
     public void signUpTeamClick(View view) {
         //todo - validate if there is room
-        Intent temp = new Intent(this, SignUpTeamActivity.class);
+        Intent temp = new Intent(this, SignUpTeamToQuizActivity.class);
         temp.putExtra("QUIZ", this.quiz);
         startActivity(temp);
     }
@@ -174,7 +174,7 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
         }
     }
 
-    public static class SignUpTeamActivity extends AppCompatActivity {
+    public static class SignUpTeamToQuizActivity extends AppCompatActivity {
 
         private Quiz quiz;
         private EditText quizNameInput;
