@@ -19,7 +19,12 @@ import android.widget.ImageView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.hornak.prototype.model.teams.Team;
 import com.hornak.prototype.ui.FadingImageViewHandler;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
@@ -31,14 +36,17 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
     public static final String QUIZZES_KEY_PAST = "QUIZZES_NODE_PAST";
     public static final String QUIZZES_TEAMS = "QUIZZES_TEAMS";
     public static final String DATE_FORMAT = "DD-MMM-YYYY";
+
     // Firebase instance variables
     private static FirebaseAuth mFirebaseAuth;
     private static FirebaseUser mFirebaseUser;
-    AppBarLayout appBarLayout;
-    ImageView mPhotoView;
-    private FirebaseHelper frbsHelper;
     private String mUsername;
     private String mPhotoUrl;
+    private Team mTeam;
+
+    private AppBarLayout appBarLayout;
+    private ImageView mPhotoView;
+    private FirebaseHelper frbsHelper;
     private FadingImageViewHandler fadingImageViewHandler;
 
     @Override
@@ -67,6 +75,21 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
         this.appBarLayout.addOnOffsetChangedListener(this);
 
         frbsHelper = new FirebaseHelper(FirebaseDatabase.getInstance().getReference(QUIZZES_KEY_FUTURE));
+
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(QUIZZES_TEAMS.concat("/").concat(mFirebaseUser.getUid()));
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String value = (String) dataSnapshot.getValue();
+                // do your stuff here with value
+            }
+
+            @Override
+            public void onCancelled(DatabaseError firebaseError) {
+
+            }
+        });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -137,8 +160,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
 
     public void setupFab() {
 
-        // Set up the white button on the lower right corner
-        // more or less with default parameter
+        boolean hasTeam = false;
         final ImageView fabIconNew = new ImageView(this);
         fabIconNew.setImageDrawable(getResources().getDrawable(R.mipmap.ic_settings_white_24dp));
         //fabIconNew.setBackgroundTintList(ColorStateList.valueOf(Color.YELLOW));
@@ -156,7 +178,12 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
 
         rlIcon1.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_black_24dp));
         rlIcon2.setImageDrawable(getResources().getDrawable(R.drawable.ic_share));
-        rlIcon3.setImageDrawable(getResources().getDrawable(R.drawable.ic_team_add_black_24dp));
+        if (mTeam == null) {
+            rlIcon3.setImageDrawable(getResources().getDrawable(R.drawable.ic_team_add_black_24dp));
+        } else {
+            rlIcon3.setImageDrawable(getResources().getDrawable(R.drawable.ic_team_black_24dp));
+            hasTeam = true;
+        }
         rlIcon4.setImageDrawable(getResources().getDrawable(R.drawable.ic_cloud_upload_black_24dp));
 
         // Build the menu with default options: light theme, 90 degrees, 72dp radius.
@@ -176,12 +203,23 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
             }
         });
 
-        rlIcon3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), RegisterNewTeam.class));
-            }
-        });
+        if (hasTeam) {
+            rlIcon3.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent temp = new Intent(getApplicationContext(), TeamDetailActivity.class);
+                    temp.putExtra("TEAM", mTeam);
+                    startActivity(temp);
+                }
+            });
+        } else {
+            rlIcon3.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(getApplicationContext(), RegisterNewTeam.class));
+                }
+            });
+        }
 
         rlIcon4.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -220,7 +258,6 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-
             this.setContentView(R.layout.activity_sign_up_team);
         }
 
@@ -253,5 +290,4 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
         }
 
     }
-
 }

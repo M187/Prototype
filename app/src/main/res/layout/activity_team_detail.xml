@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="250dp"
+    android:layout_height="wrap_content"
+    android:background="@color/background_tint"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="15dp">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:hint="Meno teamu:"
+        android:textColor="@color/black"
+        android:textSize="13dp" />
+
+    <EditText
+        android:id="@+id/team_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:gravity="center"
+        android:hint="Meno teamu"
+        android:textColor="@color/black"
+        android:textSize="15dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:hint="Celkove body:"
+        android:textColor="@color/black"
+        android:textSize="13dp" />
+
+    <EditText
+        android:id="@+id/team_points_overall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:gravity="center"
+        android:hint="125"
+        android:textColor="@color/black"
+        android:textSize="15dp" />
+
+
+    <Button
+        android:layout_width="@dimen/round_button_dimen"
+        android:layout_height="@dimen/round_button_dimen"
+        android:layout_gravity="bottom|end"
+        android:background="@drawable/button_action"
+        android:drawableTop="@drawable/ic_remove_circle_black_24dp"
+        android:elevation="@dimen/button_elevation"
+        android:onClick="eraseTeam"
+        android:paddingTop="13dp"
+        android:textColor="@color/button_text"
+        android:textStyle="bold" />
+
+</LinearLayout>

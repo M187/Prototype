@@ -38,8 +38,8 @@
 
 
                 <Button
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
+                    android:layout_width="@dimen/round_button_dimen"
+                    android:layout_height="@dimen/round_button_dimen"
                     android:layout_gravity="end"
                     android:background="@drawable/button_action"
                     android:drawableTop="@drawable/ic_check_black_24dp"

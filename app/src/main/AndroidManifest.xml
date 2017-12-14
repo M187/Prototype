@@ -35,6 +35,12 @@
             android:theme="@style/myDialog" />
 
         <activity
+            android:name=".TeamDetailActivity"
+            android:hardwareAccelerated="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/myDialog" />
+
+        <activity
             android:name=".PendingQuizDetailActivity$SignUpTeamToQuizActivity"
             android:hardwareAccelerated="false"
             android:label="Sign up"
