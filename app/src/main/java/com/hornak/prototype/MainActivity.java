@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -40,10 +41,10 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
     // Firebase instance variables
     private static FirebaseAuth mFirebaseAuth;
     private static FirebaseUser mFirebaseUser;
+    FloatingActionButton rightLowerButton;
     private String mUsername;
     private String mPhotoUrl;
     private Team mTeam;
-
     private AppBarLayout appBarLayout;
     private ImageView mPhotoView;
     private FirebaseHelper frbsHelper;
@@ -77,12 +78,17 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
         frbsHelper = new FirebaseHelper(FirebaseDatabase.getInstance().getReference(QUIZZES_KEY_FUTURE));
 
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(QUIZZES_TEAMS.concat("/").concat(mFirebaseUser.getUid()));
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        //DatabaseReference ref = FirebaseDatabase.getInstance().getReference(QUIZZES_TEAMS.concat("/").concat(mFirebaseUser.getUid()));
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(QUIZZES_TEAMS.concat("/").concat("4b9f2ece-33e1-4f03-abda-b61e86c0f8ab"));
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String value = (String) dataSnapshot.getValue();
-                // do your stuff here with value
+                mTeam = dataSnapshot.getValue(Team.class);
+                try {
+                    ((ViewManager) rightLowerButton.getParent()).removeView(rightLowerButton);
+                } catch (NullPointerException e) {
+                }
+                setupFab();
             }
 
             @Override
@@ -123,11 +129,6 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
-        if (savedInstanceState == null) {
-            //refresh();
-        }
-
-        setupFab();
     }
 
     @Override
@@ -165,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
         fabIconNew.setImageDrawable(getResources().getDrawable(R.mipmap.ic_settings_white_24dp));
         //fabIconNew.setBackgroundTintList(ColorStateList.valueOf(Color.YELLOW));
 
-        final FloatingActionButton rightLowerButton = new FloatingActionButton.Builder(this)
+        rightLowerButton = new FloatingActionButton.Builder(this)
                 .setContentView(fabIconNew)
                 .setTheme(SubActionButton.THEME_DARK)
                 .build();
@@ -200,6 +201,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), AddQuizActivity.class));
+                rightLowerButton.callOnClick();
             }
         });
 
@@ -209,8 +211,10 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
                 public void onClick(View v) {
                     Intent temp = new Intent(getApplicationContext(), TeamDetailActivity.class);
                     temp.putExtra("TEAM", mTeam);
-                    temp.putExtra("UID", mFirebaseUser.getUid());
+                    //temp.putExtra("UID", mFirebaseUser.getUid());
+                    temp.putExtra("UID", "4b9f2ece-33e1-4f03-abda-b61e86c0f8ab");
                     startActivity(temp);
+                    rightLowerButton.callOnClick();
                 }
             });
         } else {
@@ -218,6 +222,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
                 @Override
                 public void onClick(View v) {
                     startActivity(new Intent(getApplicationContext(), RegisterNewTeam.class));
+                    rightLowerButton.callOnClick();
                 }
             });
         }
@@ -226,6 +231,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
             @Override
             public void onClick(View v) {
                 frbsHelper.makeTestData();
+                rightLowerButton.callOnClick();
             }
         });
 
@@ -254,7 +260,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
 
     public static class RegisterNewTeam extends AppCompatActivity {
 
-        com.hornak.prototype.model.teams.Team mTeam;
+        Team mTeam;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
