@@ -19,12 +19,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.hornak.prototype.model.quizzes.Quiz;
 import com.hornak.prototype.model.quizzes.Team;
+import com.hornak.prototype.model.teams.QuizData;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.hornak.prototype.MainActivity.QUIZZES_KEY_FUTURE;
 import static com.hornak.prototype.MainActivity.QUIZZES_KEY_PAST;
+import static com.hornak.prototype.MainActivity.QUIZZES_TEAMS;
 import static com.hornak.prototype.MainActivity.mTeamData;
 
 /**
@@ -163,8 +165,11 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
 
     private void moveQuizToDone() {
         final ProgressDialog pd = ProgressDialog.show(this, "", "Loading. Please wait...", true);
-
-        //for (Team)
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        // (FirebaseDatabase.getInstance().getReference(QUIZZES_KEY_FUTURE.concat("/").concat(quiz.getName())));
+        for (Team team : quiz.getTeams()) {
+            db.getReference(QUIZZES_TEAMS.concat("/").concat(team.getUid()).concat("/quizDatas/").concat(quiz.getName())).setValue(new QuizData(quiz.getName(), team.getPointsAchieved()));
+        }
 
 
         new Thread(new Runnable() {

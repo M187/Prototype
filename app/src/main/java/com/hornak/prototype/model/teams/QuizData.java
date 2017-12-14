@@ -28,6 +28,11 @@ public class QuizData implements Parcelable {
     public QuizData() {
     }
 
+    public QuizData(String name, int pointsAchieved) {
+        this.name = name;
+        this.pointsAchieved = pointsAchieved;
+    }
+
     public QuizData(Parcel in) {
         this.name = in.readString();
         this.pointsAchieved = in.readInt();

@@ -53,6 +53,10 @@ public class Team implements Parcelable {
         return name;
     }
 
+    public String getUid() {
+        return uid;
+    }
+
     public int getPointsAchieved() {
         return pointsAchieved;
     }
