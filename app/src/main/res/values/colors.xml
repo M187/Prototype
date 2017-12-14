@@ -39,6 +39,7 @@
     <color name="divider">#BDBDBD</color>
 
     <color name="background_tint">#66FFFFFF</color>
+    <color name="background_tint_red">#66F44336</color>
 
 
     <color name="black">#000</color>

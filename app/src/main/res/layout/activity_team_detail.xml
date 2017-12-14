@@ -49,6 +49,8 @@
         android:layout_height="@dimen/round_button_dimen"
         android:layout_gravity="bottom|end"
         android:background="@drawable/button_action"
+        android:backgroundTint="@color/background_tint_red"
+        android:backgroundTintMode="src_over"
         android:drawableTop="@drawable/ic_remove_circle_black_24dp"
         android:elevation="@dimen/button_elevation"
         android:onClick="eraseTeam"

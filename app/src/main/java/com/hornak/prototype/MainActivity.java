@@ -209,6 +209,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
                 public void onClick(View v) {
                     Intent temp = new Intent(getApplicationContext(), TeamDetailActivity.class);
                     temp.putExtra("TEAM", mTeam);
+                    temp.putExtra("UID", mFirebaseUser.getUid());
                     startActivity(temp);
                 }
             });
@@ -263,9 +264,12 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
 
         public void addTeam(View view) {
 
-            //Todo - UID hardcoded for now
-            //mTeam = new com.hornak.prototype.model.teams.Team(((EditText) findViewById(R.id.team_name)).getText().toString(), mFirebaseUser.getUid(), mFirebaseUser.getEmail(), 0);
-            mTeam = new com.hornak.prototype.model.teams.Team(((EditText) findViewById(R.id.team_name)).getText().toString(), "4b9f2ece-33e1-4f03-abda-b61e86c0f8ab", "some@gmail.com", 0);
+            // todo - UID hardcoded for now
+            //String myUID = mFirebaseUser.getUid();
+            //String myEmail = mFirebaseUser.getEmail();
+            final String myUID = "4b9f2ece-33e1-4f03-abda-b61e86c0f8ab";
+            String myEmail = "some@gmail.com";
+            mTeam = new com.hornak.prototype.model.teams.Team(((EditText) findViewById(R.id.team_name)).getText().toString(), myUID, myEmail, 0);
 
             AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.myDialog));
             builder.setCancelable(true);
@@ -275,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
-                            database.getReference(QUIZZES_TEAMS).setValue(mTeam);
+                            database.getReference(QUIZZES_TEAMS.concat("/").concat(myUID)).setValue(mTeam);
                             finish();
                         }
                     });
