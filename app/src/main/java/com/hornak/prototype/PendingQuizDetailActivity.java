@@ -2,16 +2,15 @@ package com.hornak.prototype;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,7 +25,7 @@ import butterknife.ButterKnife;
 
 import static com.hornak.prototype.MainActivity.QUIZZES_KEY_FUTURE;
 import static com.hornak.prototype.MainActivity.QUIZZES_KEY_PAST;
-import static com.hornak.prototype.MainActivity.QUIZZES_TEAMS;
+import static com.hornak.prototype.MainActivity.mTeam;
 
 /**
  * Created by michal.hornak on 11/28/2017.
@@ -70,16 +69,8 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
         //this.mUID = mFirebaseUser.getUid();
         this.mUID = "4b9f2ece-33e1-4f03-abda-b61e86c0f8ab";
 
-        checkSignUpTeamButtonLogic();
-
+        this.signUpTeamButton.setClickable(false);
         setupTeams();
-
-        for (Team team : quiz.getTeams()) {
-            quizTeamLayout = getLayoutInflater().inflate(R.layout.team_line, teamsPlaceholder, false);
-            ((TextView) quizTeamLayout.findViewById(R.id.team_name)).setText(team.getName());
-            ((TextView) quizTeamLayout.findViewById(R.id.team_points)).setText(String.valueOf(team.getPointsAchieved()));
-            teamsPlaceholder.addView(quizTeamLayout);
-        }
     }
 
     private void checkSignUpTeamButtonLogic() {
@@ -87,10 +78,10 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
             teamPlaceAvailability.setText(String.valueOf(quiz.getTeams().size()).concat("/").concat(String.valueOf(quiz.getNoOfTeams())));
             if (quiz.getNoOfTeams() <= quiz.getTeams().size()) {
                 signUpTeamButton.setClickable(false);
-                signUpTeamButton.setText("Sry, fulka.");
+                signUpTeamButton.setText("PLNO.");
             } else {
                 signUpTeamButton.setClickable(true);
-                signUpTeamButton.setText("Add team");
+                signUpTeamButton.setText("PRIHLAS MA");
             }
         } catch (NullPointerException e) {
         }
@@ -103,8 +94,17 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 quiz = snapshot.getValue(Quiz.class);
-                refreshQuizTeams();
+                teamsPlaceholder.removeAllViews();
+                try {
+                    for (Team team : quiz.getTeams()) {
+                        quizTeamLayout = getLayoutInflater().inflate(R.layout.team_line, teamsPlaceholder, false);
+                        ((TextView) quizTeamLayout.findViewById(R.id.team_name)).setText(team.getName());
+                        teamsPlaceholder.addView(quizTeamLayout);
+                    }
+                } catch (NullPointerException e) {
+                }
                 checkSignUpTeamButtonLogic();
+                signUpTeamButton.setClickable(true);
             }
 
             @Override
@@ -115,22 +115,32 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
 
     public void signUpTeamClick(View view) {
         //todo - validate if there is room
-        final Intent temp = new Intent(this, SignUpTeamToQuizActivity.class);
-        temp.putExtra("QUIZ", this.quiz);
+        if (mTeam == null) {
+            Toast.makeText(getApplicationContext(), "Nemas registrovany team!", Toast.LENGTH_LONG).show();
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.myDialog));
+            builder.setCancelable(true);
+            builder.setMessage("Prihlasit team?");
+            builder.setPositiveButton("Confirm",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(QUIZZES_TEAMS.concat("/").concat(mUID));
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                com.hornak.prototype.model.teams.Team mTeam = dataSnapshot.getValue(com.hornak.prototype.model.teams.Team.class);
-                temp.putExtra("TEAM", mTeam);
-                startActivity(temp);
-            }
+                            quiz.getTeams().add(new Team(mTeam));
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            database.getReference(QUIZZES_KEY_FUTURE).child(quiz.getName().concat("/teams/")).setValue(quiz.getTeams());
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
+                        }
+                    });
+            builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
     }
 
     public void moveToDone(View view) {
@@ -175,60 +185,5 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
         }
         pd.dismiss();
         this.finish();
-    }
-
-    private void refreshQuizTeams() {
-        teamsPlaceholder.removeAllViews();
-        try {
-            for (Team team : quiz.getTeams()) {
-                quizTeamLayout = getLayoutInflater().inflate(R.layout.team_line, teamsPlaceholder, false);
-                ((TextView) quizTeamLayout.findViewById(R.id.team_name)).setText(team.getName());
-                ((TextView) quizTeamLayout.findViewById(R.id.team_points)).setText(String.valueOf(team.getPointsAchieved()));
-                teamsPlaceholder.addView(quizTeamLayout);
-            }
-        } catch (NullPointerException e) {
-        }
-    }
-
-    public static class SignUpTeamToQuizActivity extends AppCompatActivity {
-
-        private Quiz quiz;
-        private com.hornak.prototype.model.teams.Team mTeam;
-        private EditText quizNameInput;
-
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            this.setContentView(R.layout.activity_sign_up_team);
-
-            this.quizNameInput = (EditText) findViewById(R.id.team_name);
-            Bundle data = getIntent().getExtras();
-            this.quiz = data.getParcelable("QUIZ");
-            this.mTeam = data.getParcelable("TEAM");
-        }
-
-        public void addTeam(View view) {
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.myDialog));
-            builder.setCancelable(true);
-            builder.setMessage("Prihlasit team?");
-            builder.setPositiveButton("Confirm",
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            quiz.getTeams().add(new Team(mTeam));
-                            FirebaseDatabase database = FirebaseDatabase.getInstance();
-                            database.getReference(QUIZZES_KEY_FUTURE).child(quiz.getName().concat("/teams")).setValue(quiz.getTeams());
-                            finish();
-                        }
-                    });
-            builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                }
-            });
-
-            AlertDialog dialog = builder.create();
-            dialog.show();
-        }
     }
 }

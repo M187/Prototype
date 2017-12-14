@@ -26,6 +26,7 @@ public class Team implements Parcelable {
     public String uid;
     public int pointsAchieved;
 
+
     public Team() {
     }
 

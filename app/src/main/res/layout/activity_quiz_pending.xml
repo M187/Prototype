@@ -133,7 +133,7 @@
                         android:onClick="signUpTeamClick"
                         android:paddingEnd="10dp"
                         android:paddingStart="10dp"
-                        android:text="Add team"
+                        android:text="PRIHLASIT"
                         android:textColor="@color/button_text"
                         android:textSize="14sp"
                         android:textStyle="bold" />

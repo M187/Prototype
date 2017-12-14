@@ -40,13 +40,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/myDialog" />
 
-        <activity
-            android:name=".PendingQuizDetailActivity$SignUpTeamToQuizActivity"
-            android:hardwareAccelerated="false"
-            android:label="Sign up"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Dialog" />
-
     </application>
 
 </manifest>

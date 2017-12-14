@@ -38,12 +38,12 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
     public static final String QUIZZES_TEAMS = "QUIZZES_TEAMS";
     public static final String DATE_FORMAT = "DD-MMM-YYYY";
     public static FirebaseUser mFirebaseUser;
+    public static Team mTeam;
     // Firebase instance variables
     private static FirebaseAuth mFirebaseAuth;
     FloatingActionButton rightLowerButton;
     private String mUsername;
     private String mPhotoUrl;
-    private Team mTeam;
     private AppBarLayout appBarLayout;
     private ImageView mPhotoView;
     private FirebaseHelper frbsHelper;
@@ -89,10 +89,8 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
                 }
                 setupFab();
             }
-
             @Override
             public void onCancelled(DatabaseError firebaseError) {
-
             }
         });
 
