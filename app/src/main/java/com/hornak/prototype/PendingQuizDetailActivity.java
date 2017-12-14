@@ -25,7 +25,7 @@ import butterknife.ButterKnife;
 
 import static com.hornak.prototype.MainActivity.QUIZZES_KEY_FUTURE;
 import static com.hornak.prototype.MainActivity.QUIZZES_KEY_PAST;
-import static com.hornak.prototype.MainActivity.mTeam;
+import static com.hornak.prototype.MainActivity.mTeamData;
 
 /**
  * Created by michal.hornak on 11/28/2017.
@@ -51,7 +51,6 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
     View quizTeamLayout;
 
     private Quiz quiz;
-    private String mUID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +64,6 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
         quizDate.setText("Datum: ".concat(quiz.getTimestamp()));
         quizTheme.setText("Tema: ".concat(quiz.getTheme()));
         quizPlace.setText("Miesto: ".concat(quiz.getPlace()));
-
-        //this.mUID = mFirebaseUser.getUid();
-        this.mUID = "4b9f2ece-33e1-4f03-abda-b61e86c0f8ab";
 
         this.signUpTeamButton.setClickable(false);
         setupTeams();
@@ -115,7 +111,7 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
 
     public void signUpTeamClick(View view) {
         //todo - validate if there is room
-        if (mTeam == null) {
+        if (mTeamData == null) {
             Toast.makeText(getApplicationContext(), "Nemas registrovany team!", Toast.LENGTH_LONG).show();
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.myDialog));
@@ -126,7 +122,7 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
-                            quiz.getTeams().add(new Team(mTeam));
+                            quiz.getTeams().add(new Team(mTeamData));
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
                             database.getReference(QUIZZES_KEY_FUTURE).child(quiz.getName().concat("/teams/")).setValue(quiz.getTeams());
 
@@ -167,6 +163,10 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
 
     private void moveQuizToDone() {
         final ProgressDialog pd = ProgressDialog.show(this, "", "Loading. Please wait...", true);
+
+        //for (Team)
+
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -176,7 +176,6 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
                 FirebaseHelper fbHelper2 = new FirebaseHelper(database.getReference(QUIZZES_KEY_PAST));
                 fbHelper2.save(quiz);
             }
-
         }).start();
         try {
             Thread.sleep(2000);

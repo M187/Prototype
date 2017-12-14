@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.google.firebase.database.FirebaseDatabase;
-import com.hornak.prototype.model.teams.Team;
+import com.hornak.prototype.model.teams.TeamData;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,7 +22,7 @@ import static com.hornak.prototype.MainActivity.QUIZZES_TEAMS;
 
 public class TeamDetailActivity extends AppCompatActivity {
 
-    Team mTeam;
+    TeamData mTeamData;
     String mUid;
 
     @BindView(R.id.team_name)
@@ -33,14 +33,14 @@ public class TeamDetailActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTeam = this.getIntent().getExtras().getParcelable("TEAM");
+        mTeamData = this.getIntent().getExtras().getParcelable("TEAM");
         //mUid = mFirebaseUser.getUid();
         mUid = "4b9f2ece-33e1-4f03-abda-b61e86c0f8ab";
 
         this.setContentView(R.layout.activity_team_detail);
         ButterKnife.bind(this);
 
-        teamNameTV.setText(mTeam.getName());
+        teamNameTV.setText(mTeamData.getName());
 
         //todo: points
     }

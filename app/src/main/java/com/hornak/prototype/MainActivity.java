@@ -25,7 +25,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.hornak.prototype.model.teams.Team;
+import com.hornak.prototype.model.teams.TeamData;
 import com.hornak.prototype.ui.FadingImageViewHandler;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
     public static final String QUIZZES_TEAMS = "QUIZZES_TEAMS";
     public static final String DATE_FORMAT = "DD-MMM-YYYY";
     public static FirebaseUser mFirebaseUser;
-    public static Team mTeam;
+    public static TeamData mTeamData;
     // Firebase instance variables
     private static FirebaseAuth mFirebaseAuth;
     FloatingActionButton rightLowerButton;
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                mTeam = dataSnapshot.getValue(Team.class);
+                mTeamData = dataSnapshot.getValue(TeamData.class);
                 try {
                     ((ViewManager) rightLowerButton.getParent()).removeView(rightLowerButton);
                 } catch (NullPointerException e) {
@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
 
         rlIcon1.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_black_24dp));
         rlIcon2.setImageDrawable(getResources().getDrawable(R.drawable.ic_share));
-        if (mTeam == null) {
+        if (mTeamData == null) {
             rlIcon3.setImageDrawable(getResources().getDrawable(R.drawable.ic_team_add_black_24dp));
         } else {
             rlIcon3.setImageDrawable(getResources().getDrawable(R.drawable.ic_team_black_24dp));
@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
                 @Override
                 public void onClick(View v) {
                     Intent temp = new Intent(getApplicationContext(), TeamDetailActivity.class);
-                    temp.putExtra("TEAM", mTeam);
+                    temp.putExtra("TEAM", mTeamData);
                     startActivity(temp);
                     rightLowerButton.callOnClick();
                 }
@@ -253,7 +253,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
 
     public static class RegisterNewTeam extends AppCompatActivity {
 
-        Team mTeam;
+        TeamData mTeamData;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -268,7 +268,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
             //String myEmail = mFirebaseUser.getEmail();
             final String myUID = "4b9f2ece-33e1-4f03-abda-b61e86c0f8ab";
             String myEmail = "some@gmail.com";
-            mTeam = new com.hornak.prototype.model.teams.Team(((EditText) findViewById(R.id.team_name)).getText().toString(), myUID, myEmail, 0);
+            mTeamData = new TeamData(((EditText) findViewById(R.id.team_name)).getText().toString(), myUID, myEmail, 0);
 
             AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.myDialog));
             builder.setCancelable(true);
@@ -278,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
-                            database.getReference(QUIZZES_TEAMS.concat("/").concat(myUID)).setValue(mTeam);
+                            database.getReference(QUIZZES_TEAMS.concat("/").concat(myUID)).setValue(mTeamData);
                             finish();
                         }
                     });

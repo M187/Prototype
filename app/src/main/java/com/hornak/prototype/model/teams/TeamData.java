@@ -3,22 +3,25 @@ package com.hornak.prototype.model.teams;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by michal.hornak on 12/13/2017.
  */
 
-public class Team implements Parcelable {
+public class TeamData implements Parcelable {
 
     // Parcelling part
-    public static final Creator<Team> CREATOR = new Creator<Team>() {
+    public static final Creator<TeamData> CREATOR = new Creator<TeamData>() {
         @Override
-        public Team createFromParcel(Parcel in) {
-            return new Team(in);
+        public TeamData createFromParcel(Parcel in) {
+            return new TeamData(in);
         }
 
         @Override
-        public Team[] newArray(int size) {
-            return new Team[size];
+        public TeamData[] newArray(int size) {
+            return new TeamData[size];
         }
     };
 
@@ -26,22 +29,24 @@ public class Team implements Parcelable {
     public String uid;
     public String ownerEmail;
     public int pointsAchieved;
+    public List<QuizData> quizDatas = new ArrayList<>();
 
-    public Team() {
+    public TeamData() {
     }
 
-    public Team(String name, String uid, String ownerEmail, int pointsAchieved) {
+    public TeamData(String name, String uid, String ownerEmail, int pointsAchieved) {
         this.name = name;
         this.uid = uid;
         this.ownerEmail = ownerEmail;
         this.pointsAchieved = pointsAchieved;
     }
 
-    public Team(Parcel in) {
+    public TeamData(Parcel in) {
         this.name = in.readString();
         this.uid = in.readString();
         this.ownerEmail = in.readString();
         this.pointsAchieved = in.readInt();
+        in.readTypedList(quizDatas, QuizData.CREATOR);
     }
 
     public String getName() {
@@ -60,6 +65,10 @@ public class Team implements Parcelable {
         return pointsAchieved;
     }
 
+    public List<QuizData> getQuizDatas() {
+        return quizDatas;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -71,5 +80,8 @@ public class Team implements Parcelable {
         dest.writeString(this.uid);
         dest.writeString(this.ownerEmail);
         dest.writeInt(this.pointsAchieved);
+        dest.writeTypedList(this.quizDatas);
     }
+
+
 }

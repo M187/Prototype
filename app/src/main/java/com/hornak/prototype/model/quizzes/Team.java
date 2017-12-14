@@ -3,6 +3,8 @@ package com.hornak.prototype.model.quizzes;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.hornak.prototype.model.teams.TeamData;
+
 /**
  * Created by michal.hornak on 11/23/2017.
  */
@@ -35,9 +37,9 @@ public class Team implements Parcelable {
         this.pointsAchieved = pointsAchieved;
     }
 
-    public Team(com.hornak.prototype.model.teams.Team team) {
-        this.name = team.getName();
-        this.uid = team.getUid();
+    public Team(TeamData teamData) {
+        this.name = teamData.getName();
+        this.uid = teamData.getUid();
         this.pointsAchieved = 0;
     }
 
