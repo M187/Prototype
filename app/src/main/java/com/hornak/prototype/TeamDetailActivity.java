@@ -34,7 +34,9 @@ public class TeamDetailActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mTeam = this.getIntent().getExtras().getParcelable("TEAM");
-        mUid = this.getIntent().getExtras().getString("UID");
+        //mUid = mFirebaseUser.getUid();
+        mUid = "4b9f2ece-33e1-4f03-abda-b61e86c0f8ab";
+
         this.setContentView(R.layout.activity_team_detail);
         ButterKnife.bind(this);
 

@@ -26,6 +26,7 @@ import butterknife.ButterKnife;
 
 import static com.hornak.prototype.MainActivity.QUIZZES_KEY_FUTURE;
 import static com.hornak.prototype.MainActivity.QUIZZES_KEY_PAST;
+import static com.hornak.prototype.MainActivity.QUIZZES_TEAMS;
 
 /**
  * Created by michal.hornak on 11/28/2017.
@@ -51,6 +52,7 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
     View quizTeamLayout;
 
     private Quiz quiz;
+    private String mUID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +67,8 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
         quizTheme.setText("Tema: ".concat(quiz.getTheme()));
         quizPlace.setText("Miesto: ".concat(quiz.getPlace()));
 
-
+        //this.mUID = mFirebaseUser.getUid();
+        this.mUID = "4b9f2ece-33e1-4f03-abda-b61e86c0f8ab";
 
         checkSignUpTeamButtonLogic();
 
@@ -74,7 +77,7 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
         for (Team team : quiz.getTeams()) {
             quizTeamLayout = getLayoutInflater().inflate(R.layout.team_line, teamsPlaceholder, false);
             ((TextView) quizTeamLayout.findViewById(R.id.team_name)).setText(team.getName());
-            ((TextView) quizTeamLayout.findViewById(R.id.team_points)).setText(team.getPointsAchieved());
+            ((TextView) quizTeamLayout.findViewById(R.id.team_points)).setText(String.valueOf(team.getPointsAchieved()));
             teamsPlaceholder.addView(quizTeamLayout);
         }
     }
@@ -112,9 +115,22 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
 
     public void signUpTeamClick(View view) {
         //todo - validate if there is room
-        Intent temp = new Intent(this, SignUpTeamToQuizActivity.class);
+        final Intent temp = new Intent(this, SignUpTeamToQuizActivity.class);
         temp.putExtra("QUIZ", this.quiz);
-        startActivity(temp);
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(QUIZZES_TEAMS.concat("/").concat(mUID));
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                com.hornak.prototype.model.teams.Team mTeam = dataSnapshot.getValue(com.hornak.prototype.model.teams.Team.class);
+                temp.putExtra("TEAM", mTeam);
+                startActivity(temp);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
     }
 
     public void moveToDone(View view) {
@@ -167,7 +183,7 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
             for (Team team : quiz.getTeams()) {
                 quizTeamLayout = getLayoutInflater().inflate(R.layout.team_line, teamsPlaceholder, false);
                 ((TextView) quizTeamLayout.findViewById(R.id.team_name)).setText(team.getName());
-                ((TextView) quizTeamLayout.findViewById(R.id.team_points)).setText(team.getPointsAchieved());
+                ((TextView) quizTeamLayout.findViewById(R.id.team_points)).setText(String.valueOf(team.getPointsAchieved()));
                 teamsPlaceholder.addView(quizTeamLayout);
             }
         } catch (NullPointerException e) {
@@ -177,6 +193,7 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
     public static class SignUpTeamToQuizActivity extends AppCompatActivity {
 
         private Quiz quiz;
+        private com.hornak.prototype.model.teams.Team mTeam;
         private EditText quizNameInput;
 
         public void onCreate(Bundle savedInstanceState) {
@@ -186,6 +203,7 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
             this.quizNameInput = (EditText) findViewById(R.id.team_name);
             Bundle data = getIntent().getExtras();
             this.quiz = data.getParcelable("QUIZ");
+            this.mTeam = data.getParcelable("TEAM");
         }
 
         public void addTeam(View view) {
@@ -197,7 +215,7 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            quiz.getTeams().add(new Team(quizNameInput.getText().toString(), "0"));
+                            quiz.getTeams().add(new Team(mTeam));
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
                             database.getReference(QUIZZES_KEY_FUTURE).child(quiz.getName().concat("/teams")).setValue(quiz.getTeams());
                             finish();

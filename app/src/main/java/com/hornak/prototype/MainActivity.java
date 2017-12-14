@@ -37,10 +37,9 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
     public static final String QUIZZES_KEY_PAST = "QUIZZES_NODE_PAST";
     public static final String QUIZZES_TEAMS = "QUIZZES_TEAMS";
     public static final String DATE_FORMAT = "DD-MMM-YYYY";
-
+    public static FirebaseUser mFirebaseUser;
     // Firebase instance variables
     private static FirebaseAuth mFirebaseAuth;
-    private static FirebaseUser mFirebaseUser;
     FloatingActionButton rightLowerButton;
     private String mUsername;
     private String mPhotoUrl;
@@ -149,14 +148,12 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
 
     @Override
     public void onPause() {
-        //todo mFirebaseAdapter.stopListening();
         super.onPause();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        //todo mFirebaseAdapter.startListening();
     }
 
     public void setupFab() {
@@ -211,8 +208,6 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
                 public void onClick(View v) {
                     Intent temp = new Intent(getApplicationContext(), TeamDetailActivity.class);
                     temp.putExtra("TEAM", mTeam);
-                    //temp.putExtra("UID", mFirebaseUser.getUid());
-                    temp.putExtra("UID", "4b9f2ece-33e1-4f03-abda-b61e86c0f8ab");
                     startActivity(temp);
                     rightLowerButton.callOnClick();
                 }
@@ -271,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
         public void addTeam(View view) {
 
             // todo - UID hardcoded for now
-            //String myUID = mFirebaseUser.getUid();
+            //final String myUID = mFirebaseUser.getUid();
             //String myEmail = mFirebaseUser.getEmail();
             final String myUID = "4b9f2ece-33e1-4f03-abda-b61e86c0f8ab";
             String myEmail = "some@gmail.com";

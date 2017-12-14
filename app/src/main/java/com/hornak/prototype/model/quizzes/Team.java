@@ -23,26 +23,34 @@ public class Team implements Parcelable {
     };
 
     public String name;
-    public String pointsAchieved;
+    public String uid;
+    public int pointsAchieved;
 
     public Team() {
     }
 
-    public Team(String name, String pointsAchieved) {
+    public Team(String name, int pointsAchieved) {
         this.name = name;
         this.pointsAchieved = pointsAchieved;
     }
 
+    public Team(com.hornak.prototype.model.teams.Team team) {
+        this.name = team.getName();
+        this.uid = team.getUid();
+        this.pointsAchieved = 0;
+    }
+
     public Team(Parcel in) {
         this.name = in.readString();
-        this.pointsAchieved = in.readString();
+        this.uid = in.readString();
+        this.pointsAchieved = in.readInt();
     }
 
     public String getName() {
         return name;
     }
 
-    public String getPointsAchieved() {
+    public int getPointsAchieved() {
         return pointsAchieved;
     }
 
@@ -54,6 +62,7 @@ public class Team implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.name);
-        dest.writeString(this.pointsAchieved);
+        dest.writeString(this.uid);
+        dest.writeInt(this.pointsAchieved);
     }
 }
