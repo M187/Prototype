@@ -28,24 +28,24 @@ public class TeamData implements Parcelable, Comparable {
     public String name;
     public String uid;
     public String ownerEmail;
-    public int pointsAchieved;
+    public int points;
     public HashMap<String, Object> quizDatas = new HashMap<>();
 
     public TeamData() {
     }
 
-    public TeamData(String name, String uid, String ownerEmail, int pointsAchieved) {
+    public TeamData(String name, String uid, String ownerEmail, int points) {
         this.name = name;
         this.uid = uid;
         this.ownerEmail = ownerEmail;
-        this.pointsAchieved = pointsAchieved;
+        this.points = points;
     }
 
     public TeamData(Parcel in) {
         this.name = in.readString();
         this.uid = in.readString();
         this.ownerEmail = in.readString();
-        this.pointsAchieved = in.readInt();
+        this.points = in.readInt();
     }
 
     public String getName() {
@@ -60,8 +60,8 @@ public class TeamData implements Parcelable, Comparable {
         return ownerEmail;
     }
 
-    public int getPointsAchieved() {
-        return pointsAchieved;
+    public int getPoints() {
+        return points;
     }
 
     public HashMap<String, Object> getQuizDatas() {
@@ -78,13 +78,13 @@ public class TeamData implements Parcelable, Comparable {
         dest.writeString(this.name);
         dest.writeString(this.uid);
         dest.writeString(this.ownerEmail);
-        dest.writeInt(this.pointsAchieved);
+        dest.writeInt(this.points);
     }
 
     @Override
     public int compareTo(Object o) {
         if (o instanceof TeamData) {
-            return this.pointsAchieved - ((TeamData) o).pointsAchieved;
+            return this.points - ((TeamData) o).points;
         } else return 1;
     }
 

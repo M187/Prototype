@@ -230,12 +230,17 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
     }
 
     private void updateTeamOverallPoints(final Team team, final FirebaseDatabase db) {
-        db.getReference(QUIZZES_TEAMS.concat(team.getUid())).addListenerForSingleValueEvent(new ValueEventListener() {
+        db.getReference(QUIZZES_TEAMS.concat("/").concat(team.getUid())).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                TeamData temp = dataSnapshot.child(team.getUid()).getValue(TeamData.class);
-                int newPoints = temp.pointsAchieved + team.pointsAchieved;
-                db.getReference(QUIZZES_TEAMS.concat(team.getUid())).child("pointsAchieved").setValue(newPoints);
+                TeamData temp = dataSnapshot.getValue(TeamData.class);
+                int newPoints;
+                try {
+                    newPoints = temp.points + team.pointsAchieved;
+                } catch (NullPointerException e) {
+                    newPoints = team.pointsAchieved;
+                }
+                db.getReference(QUIZZES_TEAMS.concat("/").concat(team.getUid())).child("points").setValue(newPoints);
             }
 
             @Override

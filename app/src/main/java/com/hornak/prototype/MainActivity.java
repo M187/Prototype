@@ -262,8 +262,6 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
 
     public static class RegisterNewTeam extends AppCompatActivity {
 
-        TeamData mTeamData;
-
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
