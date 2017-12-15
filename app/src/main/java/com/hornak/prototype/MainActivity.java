@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
     private ImageView mPhotoView;
     private FirebaseHelper frbsHelper;
     private FadingImageViewHandler fadingImageViewHandler;
+    private boolean isFabOpened = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,6 +147,12 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
     @Override
     public void onPause() {
         super.onPause();
+        try {
+            if (isFabOpened) {
+                rightLowerButton.callOnClick();
+            }
+        } catch (NullPointerException e) {
+        }
     }
 
     @Override
@@ -157,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
 
         boolean hasTeam = false;
         final ImageView fabIconNew = new ImageView(this);
+
         fabIconNew.setImageDrawable(getResources().getDrawable(R.mipmap.ic_settings_white_24dp));
         //fabIconNew.setBackgroundTintList(ColorStateList.valueOf(Color.YELLOW));
 
@@ -233,6 +241,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
             @Override
             public void onMenuOpened(FloatingActionMenu menu) {
                 // Rotate the icon of rightLowerButton 45 degrees clockwise
+                isFabOpened = true;
                 fabIconNew.setRotation(0);
                 PropertyValuesHolder pvhR = PropertyValuesHolder.ofFloat(View.ROTATION, 45);
                 ObjectAnimator animation = ObjectAnimator.ofPropertyValuesHolder(fabIconNew, pvhR);
@@ -242,6 +251,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
             @Override
             public void onMenuClosed(FloatingActionMenu menu) {
                 // Rotate the icon of rightLowerButton 45 degrees counter-clockwise
+                isFabOpened = false;
                 fabIconNew.setRotation(45);
                 PropertyValuesHolder pvhR = PropertyValuesHolder.ofFloat(View.ROTATION, 0);
                 ObjectAnimator animation = ObjectAnimator.ofPropertyValuesHolder(fabIconNew, pvhR);

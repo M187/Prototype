@@ -38,10 +38,16 @@ public class Team implements Parcelable {
         this.pointsAchieved = pointsAchieved;
     }
 
+    /**
+     * Designed to be used during team signup
+     *
+     * @param teamData
+     */
     public Team(TeamData teamData) {
         this.name = teamData.getName();
         this.uid = teamData.getUid();
-        this.pointsAchieved = 0;
+        //todo change value to -1
+        this.pointsAchieved = 1;
     }
 
     public Team(Parcel in) {

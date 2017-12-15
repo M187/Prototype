@@ -11,9 +11,6 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import static com.hornak.prototype.MainActivity.QUIZZES_KEY_FUTURE;
 
 /**
@@ -55,22 +52,4 @@ public class LeagueFragment extends Fragment {
 //        mRecyclerView.setAdapter(mFirebaseAdapter);
 //    }
 
-    private void createTeamEntry() {
-
-    }
-
-    private class TeamStatistics implements Comparable {
-
-        String mName;
-        int pointsOverAll;
-        int quizAttended;
-        Map<String, Integer> quizMap = new LinkedHashMap<>();
-
-        @Override
-        public int compareTo(Object o) {
-            if (o instanceof TeamStatistics) {
-                return this.pointsOverAll - ((TeamStatistics) o).pointsOverAll;
-            } else return 1;
-        }
-    }
 }

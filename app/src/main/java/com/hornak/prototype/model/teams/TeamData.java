@@ -9,7 +9,7 @@ import java.util.HashMap;
  * Created by michal.hornak on 12/13/2017.
  */
 
-public class TeamData implements Parcelable {
+public class TeamData implements Parcelable, Comparable {
 
     // Parcelling part
     public static final Creator<TeamData> CREATOR = new Creator<TeamData>() {
@@ -79,5 +79,12 @@ public class TeamData implements Parcelable {
         dest.writeString(this.uid);
         dest.writeString(this.ownerEmail);
         dest.writeInt(this.pointsAchieved);
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        if (o instanceof TeamData) {
+            return this.pointsAchieved - ((TeamData) o).pointsAchieved;
+        } else return 1;
     }
 }

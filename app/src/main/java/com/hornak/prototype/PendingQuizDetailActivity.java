@@ -20,6 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.hornak.prototype.model.quizzes.Quiz;
 import com.hornak.prototype.model.quizzes.Team;
 import com.hornak.prototype.model.teams.QuizData;
+import com.hornak.prototype.model.teams.TeamData;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -166,9 +167,9 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
     private void moveQuizToDone() {
         final ProgressDialog pd = ProgressDialog.show(this, "", "Loading. Please wait...", true);
         FirebaseDatabase db = FirebaseDatabase.getInstance();
-        // (FirebaseDatabase.getInstance().getReference(QUIZZES_KEY_FUTURE.concat("/").concat(quiz.getName())));
         for (Team team : quiz.getTeams()) {
             db.getReference(QUIZZES_TEAMS.concat("/").concat(team.getUid()).concat("/quizDatas/")).child(quiz.getName()).setValue(new QuizData(quiz.getName(), team.getPointsAchieved()));
+            updateTeamOverallPoints(team, db);
         }
         new Thread(new Runnable() {
             @Override
@@ -187,5 +188,21 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
         }
         pd.dismiss();
         this.finish();
+    }
+
+    private void updateTeamOverallPoints(final Team team, final FirebaseDatabase db) {
+        db.getReference(QUIZZES_TEAMS.concat(team.getUid())).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                TeamData temp = dataSnapshot.child(team.getUid()).getValue(TeamData.class);
+                int newPoints = temp.pointsAchieved + team.pointsAchieved;
+                db.getReference(QUIZZES_TEAMS.concat(team.getUid())).child("pointsAchieved").setValue(newPoints);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
     }
 }
