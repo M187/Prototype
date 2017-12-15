@@ -41,7 +41,7 @@ public class TeamDetailActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         teamNameTV.setText(mTeamData.getName());
-        overallPointsTV.setText(mTeamData.getPointsAchieved());
+        overallPointsTV.setText(String.valueOf(mTeamData.getPoints()));
 
         //todo: points
     }
