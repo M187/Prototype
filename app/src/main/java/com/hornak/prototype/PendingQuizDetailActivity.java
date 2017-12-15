@@ -168,10 +168,8 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         // (FirebaseDatabase.getInstance().getReference(QUIZZES_KEY_FUTURE.concat("/").concat(quiz.getName())));
         for (Team team : quiz.getTeams()) {
-            db.getReference(QUIZZES_TEAMS.concat("/").concat(team.getUid()).concat("/quizDatas/").concat(quiz.getName())).setValue(new QuizData(quiz.getName(), team.getPointsAchieved()));
+            db.getReference(QUIZZES_TEAMS.concat("/").concat(team.getUid()).concat("/quizDatas/")).child(quiz.getName()).setValue(new QuizData(quiz.getName(), team.getPointsAchieved()));
         }
-
-
         new Thread(new Runnable() {
             @Override
             public void run() {

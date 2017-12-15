@@ -76,14 +76,13 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
 
         frbsHelper = new FirebaseHelper(FirebaseDatabase.getInstance().getReference(QUIZZES_KEY_FUTURE));
 
-
         //DatabaseReference ref = FirebaseDatabase.getInstance().getReference(QUIZZES_TEAMS.concat("/").concat(mFirebaseUser.getUid()));
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(QUIZZES_TEAMS.concat("/").concat("4b9f2ece-33e1-4f03-abda-b61e86c0f8ab"));
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(QUIZZES_TEAMS);
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                mTeamData = dataSnapshot.getValue(TeamData.class);
                 try {
+                    mTeamData = dataSnapshot.child("4b9f2ece-33e1-4f03-abda-b61e86c0f8ab").getValue(TeamData.class);
                     ((ViewManager) rightLowerButton.getParent()).removeView(rightLowerButton);
                 } catch (NullPointerException e) {
                 }
@@ -205,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
                 @Override
                 public void onClick(View v) {
                     Intent temp = new Intent(getApplicationContext(), TeamDetailActivity.class);
-                    temp.putExtra("TEAM", mTeamData);
+                    //temp.putExtra("TEAM", mTeamData);
                     startActivity(temp);
                     rightLowerButton.callOnClick();
                 }
@@ -268,7 +267,8 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
             //String myEmail = mFirebaseUser.getEmail();
             final String myUID = "4b9f2ece-33e1-4f03-abda-b61e86c0f8ab";
             String myEmail = "some@gmail.com";
-            mTeamData = new TeamData(((EditText) findViewById(R.id.team_name)).getText().toString(), myUID, myEmail, 0);
+
+            final TeamData teamData = new TeamData(((EditText) findViewById(R.id.team_name)).getText().toString(), myUID, myEmail, 0);
 
             AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.myDialog));
             builder.setCancelable(true);
@@ -278,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
-                            database.getReference(QUIZZES_TEAMS.concat("/").concat(myUID)).setValue(mTeamData);
+                            database.getReference(QUIZZES_TEAMS).child(teamData.getUid()).setValue(teamData);
                             finish();
                         }
                     });
@@ -291,6 +291,5 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
             AlertDialog dialog = builder.create();
             dialog.show();
         }
-
     }
 }

@@ -3,8 +3,7 @@ package com.hornak.prototype.model.teams;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 /**
  * Created by michal.hornak on 12/13/2017.
@@ -29,7 +28,7 @@ public class TeamData implements Parcelable {
     public String uid;
     public String ownerEmail;
     public int pointsAchieved;
-    public List<QuizData> quizDatas = new ArrayList<>();
+    public HashMap<String, Object> quizDatas = new HashMap<>();
 
     public TeamData() {
     }
@@ -39,6 +38,7 @@ public class TeamData implements Parcelable {
         this.uid = uid;
         this.ownerEmail = ownerEmail;
         this.pointsAchieved = pointsAchieved;
+        this.quizDatas = quizDatas;
     }
 
     public TeamData(Parcel in) {
@@ -46,7 +46,6 @@ public class TeamData implements Parcelable {
         this.uid = in.readString();
         this.ownerEmail = in.readString();
         this.pointsAchieved = in.readInt();
-        in.readTypedList(quizDatas, QuizData.CREATOR);
     }
 
     public String getName() {
@@ -65,7 +64,7 @@ public class TeamData implements Parcelable {
         return pointsAchieved;
     }
 
-    public List<QuizData> getQuizDatas() {
+    public HashMap<String, Object> getQuizDatas() {
         return quizDatas;
     }
 
@@ -80,8 +79,5 @@ public class TeamData implements Parcelable {
         dest.writeString(this.uid);
         dest.writeString(this.ownerEmail);
         dest.writeInt(this.pointsAchieved);
-        dest.writeTypedList(this.quizDatas);
     }
-
-
 }

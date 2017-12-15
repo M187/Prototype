@@ -32,8 +32,9 @@ public class Team implements Parcelable {
     public Team() {
     }
 
-    public Team(String name, int pointsAchieved) {
+    public Team(String name, String uid, int pointsAchieved) {
         this.name = name;
+        this.uid = uid;
         this.pointsAchieved = pointsAchieved;
     }
 

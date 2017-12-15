@@ -33,7 +33,7 @@ public class TeamDetailActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTeamData = this.getIntent().getExtras().getParcelable("TEAM");
+        this.mTeamData = MainActivity.mTeamData;
         //mUid = mFirebaseUser.getUid();
         mUid = "4b9f2ece-33e1-4f03-abda-b61e86c0f8ab";
 

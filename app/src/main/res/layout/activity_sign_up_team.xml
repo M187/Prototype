@@ -5,7 +5,10 @@
     android:background="@color/background_tint"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="15dp">
+    android:paddingBottom="15dp"
+    android:paddingEnd="45dp"
+    android:paddingStart="45dp"
+    android:paddingTop="15dp">
 
     <EditText
         android:id="@+id/team_name"

@@ -53,6 +53,7 @@ public class QuizData implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
+        dest.writeString(this.name);
+        dest.writeInt(this.pointsAchieved);
     }
 }
