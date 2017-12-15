@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import com.hornak.prototype.model.teams.TeamData;
 
+import java.util.Objects;
+
 /**
  * Created by michal.hornak on 11/23/2017.
  */
@@ -78,5 +80,26 @@ public class Team implements Parcelable {
         dest.writeString(this.name);
         dest.writeString(this.uid);
         dest.writeInt(this.pointsAchieved);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (super.equals(o)) {
+            return true;
+        } else if (o instanceof Team) {
+            if (((Team) o).getUid().equals(this.getUid())) {
+                return true;
+            }
+        } else if (o instanceof TeamData) {
+            if (((TeamData) o).getUid().equals(this.getUid())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uid);
     }
 }

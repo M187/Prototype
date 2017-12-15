@@ -22,6 +22,8 @@ import com.hornak.prototype.model.quizzes.Team;
 import com.hornak.prototype.model.teams.QuizData;
 import com.hornak.prototype.model.teams.TeamData;
 
+import java.util.Iterator;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -52,7 +54,7 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
     Button signUpTeamButton;
 
     View quizTeamLayout;
-
+    boolean isMyTeamRegistered = false;
     private Quiz quiz;
 
     @Override
@@ -74,15 +76,28 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
 
     private void checkSignUpTeamButtonLogic() {
         try {
+            checkMyTeamIsRegistered();
             teamPlaceAvailability.setText(String.valueOf(quiz.getTeams().size()).concat("/").concat(String.valueOf(quiz.getNoOfTeams())));
-            if (quiz.getNoOfTeams() <= quiz.getTeams().size()) {
+            if (isMyTeamRegistered) {
+                signUpTeamButton.setClickable(true);
+                signUpTeamButton.setText("ODHLAS");
+            } else if (quiz.getNoOfTeams() <= quiz.getTeams().size()) {
                 signUpTeamButton.setClickable(false);
-                signUpTeamButton.setText("PLNO.");
+                signUpTeamButton.setText("PLNO");
             } else {
                 signUpTeamButton.setClickable(true);
                 signUpTeamButton.setText("PRIHLAS MA");
             }
         } catch (NullPointerException e) {
+        }
+    }
+
+    private void checkMyTeamIsRegistered() {
+        isMyTeamRegistered = false;
+        for (Team a : quiz.getTeams()) {
+            if (a.equals(mTeamData)) {
+                isMyTeamRegistered = true;
+            }
         }
     }
 
@@ -103,7 +118,6 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
                 } catch (NullPointerException e) {
                 }
                 checkSignUpTeamButtonLogic();
-                signUpTeamButton.setClickable(true);
             }
 
             @Override
@@ -116,7 +130,7 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
         //todo - validate if there is room
         if (mTeamData == null) {
             Toast.makeText(getApplicationContext(), "Nemas registrovany team!", Toast.LENGTH_LONG).show();
-        } else {
+        } else if (!isMyTeamRegistered) {
             AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.myDialog));
             builder.setCancelable(true);
             builder.setMessage("Prihlasit team?");
@@ -136,6 +150,31 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                 }
 
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        } else if (isMyTeamRegistered) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.myDialog));
+            builder.setCancelable(true);
+            builder.setMessage("Odhlasit team?");
+            builder.setPositiveButton("Confirm",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Iterator tIter = quiz.getTeams().iterator();
+                            while (tIter.hasNext()) {
+                                if (tIter.next().equals(mTeamData)) {
+                                    tIter.remove();
+                                }
+                            }
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            database.getReference(QUIZZES_KEY_FUTURE).child(quiz.getName().concat("/teams/")).setValue(quiz.getTeams());
+                        }
+                    });
+            builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
             });
             AlertDialog dialog = builder.create();
             dialog.show();

@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * Created by michal.hornak on 12/13/2017.
@@ -38,7 +39,6 @@ public class TeamData implements Parcelable, Comparable {
         this.uid = uid;
         this.ownerEmail = ownerEmail;
         this.pointsAchieved = pointsAchieved;
-        this.quizDatas = quizDatas;
     }
 
     public TeamData(Parcel in) {
@@ -86,5 +86,10 @@ public class TeamData implements Parcelable, Comparable {
         if (o instanceof TeamData) {
             return this.pointsAchieved - ((TeamData) o).pointsAchieved;
         } else return 1;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uid);
     }
 }
