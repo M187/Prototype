@@ -26,6 +26,11 @@ public class Admin implements Parcelable {
     public Admin() {
     }
 
+    public Admin(String uid, String email) {
+        this.uid = uid;
+        this.email = email;
+    }
+
     public Admin(Parcel in) {
         uid = in.readString();
         email = in.readString();

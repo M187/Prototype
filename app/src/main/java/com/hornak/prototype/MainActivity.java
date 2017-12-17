@@ -35,7 +35,6 @@ import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
 
@@ -57,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
     private FadingImageViewHandler fadingImageViewHandler;
     private boolean isFabOpened = false;
 
-    private List<Admin> adminList = new ArrayList<>();
+    private ArrayList<Admin> adminList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -233,7 +232,9 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
         rlIcon2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), AddAdminActivity.class));
+                Intent temp = new Intent(getApplicationContext(), AddAdminActivity.class);
+                temp.putParcelableArrayListExtra(QUIZZES_ADMINS, adminList);
+                startActivity(temp);
                 rightLowerButton.callOnClick();
             }
         });
@@ -243,7 +244,6 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
                 @Override
                 public void onClick(View v) {
                     Intent temp = new Intent(getApplicationContext(), TeamDetailActivity.class);
-                    //temp.putExtra("TEAM", mTeamData);
                     startActivity(temp);
                     rightLowerButton.callOnClick();
                 }
