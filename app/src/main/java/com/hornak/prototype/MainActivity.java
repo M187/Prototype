@@ -9,6 +9,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
@@ -25,11 +26,16 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.hornak.prototype.model.Admin;
 import com.hornak.prototype.model.teams.TeamData;
 import com.hornak.prototype.ui.FadingImageViewHandler;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
 
@@ -50,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
     private FirebaseHelper frbsHelper;
     private FadingImageViewHandler fadingImageViewHandler;
     private boolean isFabOpened = false;
+
+    private List<Admin> adminList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +98,21 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
                 }
                 setupFab();
             }
+            @Override
+            public void onCancelled(DatabaseError firebaseError) {
+            }
+        });
+
+        DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference(QUIZZES_ADMINS);
+        ref2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterator iter = dataSnapshot.getChildren().iterator();
+                while (iter.hasNext()) {
+                    adminList.add(((DataSnapshot) iter.next()).getValue(Admin.class));
+                }
+            }
+
             @Override
             public void onCancelled(DatabaseError firebaseError) {
             }
@@ -139,9 +162,8 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
 
     private void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        android.support.v4.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.fragment_container, fragment);
-
         transaction.commit();
     }
 
@@ -204,6 +226,14 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), AddQuizActivity.class));
+                rightLowerButton.callOnClick();
+            }
+        });
+
+        rlIcon2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), AddAdminActivity.class));
                 rightLowerButton.callOnClick();
             }
         });

@@ -18,14 +18,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".QuizDetailActivity"
-            android:parentActivityName=".MainActivity">
-        </activity>
+            android:parentActivityName=".MainActivity" />
+
         <activity android:name=".PendingQuizDetailActivity" />
+
         <activity
             android:name=".AddQuizActivity"
             android:parentActivityName=".MainActivity" />
+
         <activity android:name=".SignInActivity" />
 
         <activity
@@ -36,6 +39,12 @@
 
         <activity
             android:name=".TeamDetailActivity"
+            android:hardwareAccelerated="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/myDialog" />
+
+        <activity
+            android:name=".AddAdminActivity"
             android:hardwareAccelerated="false"
             android:screenOrientation="portrait"
             android:theme="@style/myDialog" />
