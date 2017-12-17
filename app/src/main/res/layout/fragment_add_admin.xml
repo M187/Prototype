@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="250dp"
+    android:layout_height="wrap_content"
+    android:background="@color/background_tint"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingBottom="15dp"
+    android:paddingEnd="45dp"
+    android:paddingStart="45dp"
+    android:paddingTop="15dp">
+
+    <EditText
+        android:id="@+id/admin_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:gravity="center"
+        android:hint="Email uctu"
+        android:paddingEnd="15dp"
+        android:paddingStart="15dp"
+        android:textColor="@color/black"
+        android:textSize="15dp" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:background="@color/button_background"
+            android:elevation="@dimen/button_elevation"
+            android:onClick="addAdmin"
+            android:text="PRIDAJ"
+            android:textColor="@color/button_text"
+            android:textStyle="bold" />
+
+        <Button
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:background="@color/button_background"
+            android:elevation="@dimen/button_elevation"
+            android:onClick="removeAdmin"
+            android:text="VYMAZ"
+            android:textColor="@color/button_text"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
     public static final String QUIZZES_KEY_FUTURE = "QUIZZES_NODE_FUTURE";
     public static final String QUIZZES_KEY_PAST = "QUIZZES_NODE_PAST";
     public static final String QUIZZES_TEAMS = "QUIZZES_TEAMS";
+    public static final String QUIZZES_ADMINS = "ADMINS";
     public static final String DATE_FORMAT = "DD-MMM-YYYY";
     public static FirebaseUser mFirebaseUser;
     public static TeamData mTeamData;
@@ -180,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
         ImageView rlIcon4 = new ImageView(this);
 
         rlIcon1.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_black_24dp));
-        rlIcon2.setImageDrawable(getResources().getDrawable(R.drawable.ic_share));
+        rlIcon2.setImageDrawable(getResources().getDrawable(R.drawable.ic_admin_black_24dp));
         if (mTeamData == null) {
             rlIcon3.setImageDrawable(getResources().getDrawable(R.drawable.ic_team_add_black_24dp));
         } else {
