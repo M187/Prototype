@@ -6,6 +6,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.firebase.database.FirebaseDatabase;
@@ -29,6 +30,8 @@ public class TeamDetailActivity extends AppCompatActivity {
     TextView teamNameTV;
     @BindView(R.id.team_points_overall)
     TextView overallPointsTV;
+    @BindView(R.id.member_mail)
+    EditText memberMailTV;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,14 +76,35 @@ public class TeamDetailActivity extends AppCompatActivity {
     public void addUserToTeam(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.myDialog));
         builder.setCancelable(true);
-        builder.setMessage("Vymazat team? Je to nevratne!");
+        builder.setMessage("Pridat clena teamu?");
         builder.setPositiveButton("Ano",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
-                        database.getReference(QUIZZES_TEAMS.concat("/").concat(mUid)).removeValue();
-                        finish();
+                        //database.getReference(QUIZZES_TEAMS.concat("/").concat(mUid)).removeValue();
+                    }
+                });
+        builder.setNegativeButton("Nie", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    public void removeUserFromTeam(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.myDialog));
+        builder.setCancelable(true);
+        builder.setMessage("Odstranit clena teamu?");
+        builder.setPositiveButton("Ano",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        FirebaseDatabase database = FirebaseDatabase.getInstance();
+                        //database.getReference(QUIZZES_TEAMS.concat("/").concat(mUid)).removeValue();
                     }
                 });
         builder.setNegativeButton("Nie", new DialogInterface.OnClickListener() {
