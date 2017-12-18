@@ -8,6 +8,7 @@ import android.support.v7.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.FirebaseDatabase;
 import com.hornak.prototype.model.teams.TeamData;
@@ -81,8 +82,14 @@ public class TeamDetailActivity extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        FirebaseDatabase database = FirebaseDatabase.getInstance();
-                        //database.getReference(QUIZZES_TEAMS.concat("/").concat(mUid)).removeValue();
+                        String userMail = memberMailTV.getText().toString();
+                        if (!userMail.equals("") & !(userMail == null)) {
+                            mTeamData.getUsersRegistered().add(userMail);
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            database.getReference(QUIZZES_TEAMS.concat("/").concat(mUid)).setValue(mTeamData);
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Nedobry email!", Toast.LENGTH_LONG).show();
+                        }
                     }
                 });
         builder.setNegativeButton("Nie", new DialogInterface.OnClickListener() {
@@ -103,8 +110,17 @@ public class TeamDetailActivity extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        FirebaseDatabase database = FirebaseDatabase.getInstance();
-                        //database.getReference(QUIZZES_TEAMS.concat("/").concat(mUid)).removeValue();
+                        String userMail = memberMailTV.getText().toString();
+                        if (!userMail.equals("") & !(userMail == null)) {
+                            if (mTeamData.getUsersRegistered().remove(userMail)) {
+                                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                database.getReference(QUIZZES_TEAMS.concat("/").concat(mUid)).setValue(mTeamData);
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Clen s takymto emailom v teame nieje!", Toast.LENGTH_LONG).show();
+                            }
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Nedobry email!", Toast.LENGTH_LONG).show();
+                        }
                     }
                 });
         builder.setNegativeButton("Nie", new DialogInterface.OnClickListener() {
