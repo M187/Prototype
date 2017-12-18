@@ -18,7 +18,9 @@ import android.view.View;
 import android.view.ViewManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.firebase.client.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -27,6 +29,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.hornak.prototype.model.Admin;
+import com.hornak.prototype.model.User;
 import com.hornak.prototype.model.teams.TeamData;
 import com.hornak.prototype.ui.FadingImageViewHandler;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
@@ -35,6 +38,7 @@ import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
 
@@ -42,6 +46,8 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
     public static final String QUIZZES_KEY_PAST = "QUIZZES_NODE_PAST";
     public static final String QUIZZES_TEAMS = "QUIZZES_TEAMS";
     public static final String QUIZZES_ADMINS = "ADMINS";
+    public static final String QUIZZES_USERS = "USERS";
+
     public static final String DATE_FORMAT = "DD-MMM-YYYY";
     public static FirebaseUser mFirebaseUser;
     public static TeamData mTeamData;
@@ -56,11 +62,16 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
     private FadingImageViewHandler fadingImageViewHandler;
     private boolean isFabOpened = false;
 
+    private ArrayList<User> userList = new ArrayList<>();
     private ArrayList<Admin> adminList = new ArrayList<>();
+    private boolean isAdmin = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Firebase.setAndroidContext(this);
+        Firebase.getDefaultConfig().setPersistenceEnabled(true);
 
         // Initialize Firebase Auth
 //        mFirebaseAuth = FirebaseAuth.getInstance();
@@ -85,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
 
         frbsHelper = new FirebaseHelper(FirebaseDatabase.getInstance().getReference(QUIZZES_KEY_FUTURE));
 
+        //<editor-fold desc="TEAMS listener">
         //DatabaseReference ref = FirebaseDatabase.getInstance().getReference(QUIZZES_TEAMS.concat("/").concat(mFirebaseUser.getUid()));
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference(QUIZZES_TEAMS);
         ref.addValueEventListener(new ValueEventListener() {
@@ -101,7 +113,9 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
             public void onCancelled(DatabaseError firebaseError) {
             }
         });
+        //</editor-fold>
 
+        //<editor-fold desc="ADMINS listener">
         DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference(QUIZZES_ADMINS);
         ref2.addValueEventListener(new ValueEventListener() {
             @Override
@@ -110,12 +124,32 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
                 while (iter.hasNext()) {
                     adminList.add(((DataSnapshot) iter.next()).getValue(Admin.class));
                 }
+                isAdmin = isUserAdmin(adminList);
+                setupFab();
             }
 
             @Override
             public void onCancelled(DatabaseError firebaseError) {
             }
         });
+        //</editor-fold>
+
+        //<editor-fold desc="USERS listener">
+        DatabaseReference ref3 = FirebaseDatabase.getInstance().getReference(QUIZZES_USERS);
+        ref3.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterator iter = dataSnapshot.getChildren().iterator();
+                while (iter.hasNext()) {
+                    userList.add(((DataSnapshot) iter.next()).getValue(User.class));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError firebaseError) {
+            }
+        });
+        //</editor-fold>
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -182,13 +216,21 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
         super.onResume();
     }
 
-    public void setupFab() {
+
+    private void setupFab() {
+        if (isAdmin) {
+            setupFabAdmin();
+        } else {
+            setupFabUser();
+        }
+    }
+
+    public void setupFabAdmin() {
 
         boolean hasTeam = false;
         final ImageView fabIconNew = new ImageView(this);
 
         fabIconNew.setImageDrawable(getResources().getDrawable(R.mipmap.ic_settings_white_24dp));
-        //fabIconNew.setBackgroundTintList(ColorStateList.valueOf(Color.YELLOW));
 
         rightLowerButton = new FloatingActionButton.Builder(this)
                 .setContentView(fabIconNew)
@@ -289,6 +331,91 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
                 animation.start();
             }
         });
+    }
+
+    public void setupFabUser() {
+
+        boolean hasTeam = false;
+        final ImageView fabIconNew = new ImageView(this);
+
+        fabIconNew.setImageDrawable(getResources().getDrawable(R.mipmap.ic_settings_white_24dp));
+
+        rightLowerButton = new FloatingActionButton.Builder(this)
+                .setContentView(fabIconNew)
+                .setTheme(SubActionButton.THEME_DARK)
+                .build();
+
+        SubActionButton.Builder rLSubBuilder = new SubActionButton.Builder(this);
+        ImageView rlIcon3 = new ImageView(this);
+
+        if (mTeamData == null) {
+            rlIcon3.setImageDrawable(getResources().getDrawable(R.drawable.ic_team_add_black_24dp));
+        } else {
+            rlIcon3.setImageDrawable(getResources().getDrawable(R.drawable.ic_team_black_24dp));
+            hasTeam = true;
+        }
+
+        // Build the menu with default options: light theme, 90 degrees, 72dp radius.
+        // Set 4 default SubActionButtons
+        final FloatingActionMenu rightLowerMenu = new FloatingActionMenu.Builder(this)
+                .addSubActionView(rLSubBuilder.setContentView(rlIcon3).build())
+                .attachTo(rightLowerButton)
+                .build();
+
+        if (hasTeam) {
+            rlIcon3.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent temp = new Intent(getApplicationContext(), TeamDetailActivity.class);
+                    startActivity(temp);
+                    rightLowerButton.callOnClick();
+                }
+            });
+        } else {
+            rlIcon3.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(getApplicationContext(), RegisterNewTeam.class));
+                    rightLowerButton.callOnClick();
+                }
+            });
+        }
+
+        // Listen menu open and close events to animate the button content view
+        rightLowerMenu.setStateChangeListener(new FloatingActionMenu.MenuStateChangeListener() {
+
+            @Override
+            public void onMenuOpened(FloatingActionMenu menu) {
+                // Rotate the icon of rightLowerButton 45 degrees clockwise
+                isFabOpened = true;
+                fabIconNew.setRotation(0);
+                PropertyValuesHolder pvhR = PropertyValuesHolder.ofFloat(View.ROTATION, 45);
+                ObjectAnimator animation = ObjectAnimator.ofPropertyValuesHolder(fabIconNew, pvhR);
+                animation.start();
+            }
+
+            @Override
+            public void onMenuClosed(FloatingActionMenu menu) {
+                // Rotate the icon of rightLowerButton 45 degrees counter-clockwise
+                isFabOpened = false;
+                fabIconNew.setRotation(45);
+                PropertyValuesHolder pvhR = PropertyValuesHolder.ofFloat(View.ROTATION, 0);
+                ObjectAnimator animation = ObjectAnimator.ofPropertyValuesHolder(fabIconNew, pvhR);
+                animation.start();
+            }
+        });
+    }
+
+    public boolean isUserAdmin(List<Admin> adminAccountsList) {
+        Iterator iter = adminAccountsList.iterator();
+        while (iter.hasNext()) {
+            if (((Admin) iter).getEmail().equals(mFirebaseUser.getEmail().replace(".", "-"))) {
+                Toast.makeText(getApplicationContext(), "Welcome back, commander!", Toast.LENGTH_LONG).show();
+                return true;
+            }
+        }
+        //todo set to false. For now it is always admin.
+        return true;
     }
 
     public static class RegisterNewTeam extends AppCompatActivity {

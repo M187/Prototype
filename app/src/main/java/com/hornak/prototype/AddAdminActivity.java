@@ -38,11 +38,10 @@ public class AddAdminActivity extends AppCompatActivity {
 
     public void addAdmin(View view) {
         String mail = email.getText().toString();
-        FirebaseDatabase.getInstance().getReference(QUIZZES_ADMINS).setValue(adminList);
         boolean isPresent = false;
         Iterator iter = adminList.iterator();
         while (iter.hasNext()) {
-            if (iter.equals(email.getText().toString())) {
+            if (((Admin) iter).getEmail().equals(email.getText().toString())) {
                 isPresent = true;
             }
         }

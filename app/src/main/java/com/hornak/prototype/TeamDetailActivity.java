@@ -69,4 +69,28 @@ public class TeamDetailActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+    public void addUserToTeam(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.myDialog));
+        builder.setCancelable(true);
+        builder.setMessage("Vymazat team? Je to nevratne!");
+        builder.setPositiveButton("Ano",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        FirebaseDatabase database = FirebaseDatabase.getInstance();
+                        database.getReference(QUIZZES_TEAMS.concat("/").concat(mUid)).removeValue();
+                        finish();
+                    }
+                });
+        builder.setNegativeButton("Nie", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
 }

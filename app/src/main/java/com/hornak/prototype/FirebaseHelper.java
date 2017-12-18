@@ -5,11 +5,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
+import com.hornak.prototype.model.Admin;
 import com.hornak.prototype.model.quizzes.Quiz;
 import com.hornak.prototype.model.quizzes.Team;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.hornak.prototype.MainActivity.QUIZZES_ADMINS;
 
 /**
  * Created by michal.hornak on 11/27/2017.
@@ -121,5 +124,11 @@ public class FirebaseHelper {
         db.child(testQuiz4.getName()).setValue(testQuiz4);
         db.child(testQuiz5.getName()).setValue(testQuiz5);
         db.child(testQuiz6.getName()).setValue(testQuiz6);
+
+        ArrayList<Admin> testAdminList = new ArrayList<>();
+        testAdminList.add(new Admin("4b9f2ece-33e1-4f03-abda-b61e86c0f8ab", "dony66@gmail.com"));
+        testAdminList.add(new Admin("1-2-3-4-5", "DrBu@gmail.com"));
+
+        db.getDatabase().getReference(QUIZZES_ADMINS).setValue(testAdminList);
     }
 }

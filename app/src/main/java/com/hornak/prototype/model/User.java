@@ -7,33 +7,35 @@ import android.os.Parcelable;
  * Created by michal.hornak on 12/17/2017.
  */
 
-public class Admin implements Parcelable {
+public class User implements Parcelable {
 
-    public static final Creator<Admin> CREATOR = new Creator<Admin>() {
+    public static final Creator<User> CREATOR = new Creator<User>() {
         @Override
-        public Admin createFromParcel(Parcel in) {
-            return new Admin(in);
+        public User createFromParcel(Parcel in) {
+            return new User(in);
         }
 
         @Override
-        public Admin[] newArray(int size) {
-            return new Admin[size];
+        public User[] newArray(int size) {
+            return new User[size];
         }
     };
     public String uid;
     public String email;
+    public String[] teams;
 
-    public Admin() {
+    public User() {
     }
 
-    public Admin(String uid, String email) {
+    public User(String uid, String email) {
         this.uid = uid;
         this.email = email.replace(".", "-");
     }
 
-    public Admin(Parcel in) {
+    public User(Parcel in) {
         uid = in.readString();
         email = in.readString();
+        in.readStringArray(teams);
     }
 
     public String getUid() {
@@ -42,6 +44,10 @@ public class Admin implements Parcelable {
 
     public String getEmail() {
         return email.replace(".", "-");
+    }
+
+    public String[] getTeams() {
+        return teams;
     }
 
     @Override
@@ -53,5 +59,6 @@ public class Admin implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(uid);
         dest.writeString(email);
+        dest.writeSerializable(teams);
     }
 }
