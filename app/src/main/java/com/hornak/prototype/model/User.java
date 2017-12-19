@@ -3,6 +3,8 @@ package com.hornak.prototype.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 /**
  * Created by michal.hornak on 12/17/2017.
  */
@@ -22,7 +24,7 @@ public class User implements Parcelable {
     };
     public String uid;
     public String email;
-    public String[] teams;
+    public ArrayList<String> teams = new ArrayList<>();
 
     public User() {
     }
@@ -35,7 +37,7 @@ public class User implements Parcelable {
     public User(Parcel in) {
         uid = in.readString();
         email = in.readString();
-        in.readStringArray(teams);
+        in.readStringList(teams);
     }
 
     public String getUid() {
@@ -46,7 +48,7 @@ public class User implements Parcelable {
         return email.replace(".", "-");
     }
 
-    public String[] getTeams() {
+    public ArrayList<String> getTeams() {
         return teams;
     }
 

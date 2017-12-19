@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.ViewManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
@@ -411,7 +410,6 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
         while (iter.hasNext()) {
             if (((Admin) iter.next()).getEmail().equals("dony66@gmail.com".replace(".", "-"))) {
                 //if (((Admin) iter.next()).getEmail().equals(mFirebaseUser.getEmail().replace(".", "-"))) {
-                Toast.makeText(getApplicationContext(), "Welcome back, commander!", Toast.LENGTH_LONG).show();
                 return true;
             }
         }
@@ -433,7 +431,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
             //final String myUID = mFirebaseUser.getUid();
             //String myEmail = mFirebaseUser.getEmail();
             final String myUID = "4b9f2ece-33e1-4f03-abda-b61e86c0f8ab";
-            String myEmail = "some@gmail.com";
+            String myEmail = "dony66@gmail.com";
 
             final TeamData teamData = new TeamData(((EditText) findViewById(R.id.team_name)).getText().toString(), myUID, myEmail, 0);
 

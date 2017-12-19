@@ -1,8 +1,5 @@
 package com.hornak.prototype;
 
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.hornak.prototype.model.Admin;
@@ -12,6 +9,7 @@ import com.hornak.prototype.model.quizzes.Team;
 import com.hornak.prototype.model.teams.TeamData;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.hornak.prototype.MainActivity.QUIZZES_ADMINS;
@@ -48,41 +46,6 @@ public class FirebaseHelper {
         }
         return saved;
     }
-
-    //READ
-    public ArrayList<Quiz> retrieve() {
-        mQuizzes.clear();
-        db.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                fetchData(dataSnapshot);
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                fetchData(dataSnapshot);
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
-
-        return mQuizzes;
-    }
-
-    private void fetchData(DataSnapshot dataSnapshot) {
-        mQuizzes.add(dataSnapshot.getValue(Quiz.class));
-    }
-
 
     public void makeTestData() {
         //insert data into database - use in admin app
@@ -146,14 +109,14 @@ public class FirebaseHelper {
     }
 
     private void forgeTeamDatas() {
-        ArrayList<TeamData> testTeamList = new ArrayList<>();
+        HashMap<String, TeamData> testTeamList = new HashMap<>();
         ArrayList<String> testUserRegisteredToTeam1 = new ArrayList<>();
         testUserRegisteredToTeam1.add("DrBuServant1@gmail-com");
         testUserRegisteredToTeam1.add("DrBuServant2@gmail-com");
         TeamData testTeamData1 = new TeamData("myTeam1", "1", "DrBu@gmail.com", 0);
         testTeamData1.usersRegistered = testUserRegisteredToTeam1;
-        testTeamList.add(testTeamData1);
-        testTeamList.add(new TeamData("myTeam2", "2", "DrHo@gmail.com", 0));
+        testTeamList.put("1-2-3-4-5", testTeamData1);
+        testTeamList.put("1-2-3-4-4", new TeamData("myTeam2", "2", "DrHo@gmail.com", 0));
         db.getDatabase().getReference(QUIZZES_TEAMS).setValue(testTeamList);
     }
 
