@@ -28,10 +28,10 @@ public class TeamData implements Parcelable, Comparable {
 
     public String name;
     public String uid;
-    public String ownerEmail;
     public int points;
     public HashMap<String, Object> quizDatas = new HashMap<>();
     public ArrayList<String> usersRegistered = new ArrayList<>();
+    private String ownerEmail;
 
     public TeamData() {
     }
@@ -39,7 +39,7 @@ public class TeamData implements Parcelable, Comparable {
     public TeamData(String name, String uid, String ownerEmail, int points) {
         this.name = name;
         this.uid = uid;
-        this.ownerEmail = ownerEmail;
+        this.ownerEmail = ownerEmail.replace(".", "-");
         this.points = points;
     }
 
@@ -61,6 +61,10 @@ public class TeamData implements Parcelable, Comparable {
 
     public String getOwnerEmail() {
         return ownerEmail;
+    }
+
+    public void setOwnerEmail(String ownerEmail) {
+        this.ownerEmail = ownerEmail.replace(".", "-");
     }
 
     public int getPoints() {

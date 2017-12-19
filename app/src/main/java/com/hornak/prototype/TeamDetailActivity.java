@@ -88,7 +88,7 @@ public class TeamDetailActivity extends AppCompatActivity {
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
                             database.getReference(QUIZZES_TEAMS.concat("/").concat(mUid)).setValue(mTeamData);
                         } else {
-                            Toast.makeText(getApplicationContext(), "Nedobry email!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Nedobry emailET!", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -119,7 +119,7 @@ public class TeamDetailActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), "Clen s takymto emailom v teame nieje!", Toast.LENGTH_LONG).show();
                             }
                         } else {
-                            Toast.makeText(getApplicationContext(), "Nedobry email!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Nedobry emailET!", Toast.LENGTH_LONG).show();
                         }
                     }
                 });

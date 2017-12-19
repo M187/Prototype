@@ -409,7 +409,8 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
     public boolean isUserAdmin(List<Admin> adminAccountsList) {
         Iterator iter = adminAccountsList.iterator();
         while (iter.hasNext()) {
-            if (((Admin) iter).getEmail().equals(mFirebaseUser.getEmail().replace(".", "-"))) {
+            if (((Admin) iter.next()).getEmail().equals("dony66@gmail.com".replace(".", "-"))) {
+                //if (((Admin) iter.next()).getEmail().equals(mFirebaseUser.getEmail().replace(".", "-"))) {
                 Toast.makeText(getApplicationContext(), "Welcome back, commander!", Toast.LENGTH_LONG).show();
                 return true;
             }

@@ -6,13 +6,17 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.hornak.prototype.model.Admin;
+import com.hornak.prototype.model.User;
 import com.hornak.prototype.model.quizzes.Quiz;
 import com.hornak.prototype.model.quizzes.Team;
+import com.hornak.prototype.model.teams.TeamData;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.hornak.prototype.MainActivity.QUIZZES_ADMINS;
+import static com.hornak.prototype.MainActivity.QUIZZES_TEAMS;
+import static com.hornak.prototype.MainActivity.QUIZZES_USERS;
 
 /**
  * Created by michal.hornak on 11/27/2017.
@@ -82,6 +86,13 @@ public class FirebaseHelper {
 
     public void makeTestData() {
         //insert data into database - use in admin app
+        forgeQuizDatas();
+        forgeAdminDatas();
+        forgeUserDatas();
+        forgeTeamDatas();
+    }
+
+    private void forgeQuizDatas() {
         List<Team> teamList = new ArrayList<>();
         teamList.add(new Team("myTeam1", "1", (int) (Math.random() * 30)));
         teamList.add(new Team("myTeam2", "2", (int) (Math.random() * 30)));
@@ -124,11 +135,32 @@ public class FirebaseHelper {
         db.child(testQuiz4.getName()).setValue(testQuiz4);
         db.child(testQuiz5.getName()).setValue(testQuiz5);
         db.child(testQuiz6.getName()).setValue(testQuiz6);
+    }
 
+    private void forgeAdminDatas() {
         ArrayList<Admin> testAdminList = new ArrayList<>();
         testAdminList.add(new Admin("4b9f2ece-33e1-4f03-abda-b61e86c0f8ab", "dony66@gmail.com"));
         testAdminList.add(new Admin("1-2-3-4-5", "DrBu@gmail.com"));
-
+        testAdminList.add(new Admin("1-2-3-4-4", "DrHO@gmail.com"));
         db.getDatabase().getReference(QUIZZES_ADMINS).setValue(testAdminList);
+    }
+
+    private void forgeTeamDatas() {
+        ArrayList<TeamData> testTeamList = new ArrayList<>();
+        ArrayList<String> testUserRegisteredToTeam1 = new ArrayList<>();
+        testUserRegisteredToTeam1.add("DrBuServant1@gmail-com");
+        testUserRegisteredToTeam1.add("DrBuServant2@gmail-com");
+        TeamData testTeamData1 = new TeamData("myTeam1", "1", "DrBu@gmail.com", 0);
+        testTeamData1.usersRegistered = testUserRegisteredToTeam1;
+        testTeamList.add(testTeamData1);
+        testTeamList.add(new TeamData("myTeam2", "2", "DrHo@gmail.com", 0));
+        db.getDatabase().getReference(QUIZZES_TEAMS).setValue(testTeamList);
+    }
+
+    private void forgeUserDatas() {
+        ArrayList<User> testUserList = new ArrayList<>();
+        testUserList.add(new User("3-3-4-5-6", "DrBuServant1@gmail.com"));
+        testUserList.add(new User("2-3-4-5-6", "DrBuServant2@gmail.com"));
+        db.getDatabase().getReference(QUIZZES_USERS).setValue(testUserList);
     }
 }

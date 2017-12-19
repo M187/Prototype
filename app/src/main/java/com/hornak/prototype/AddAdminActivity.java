@@ -24,7 +24,7 @@ import static com.hornak.prototype.MainActivity.QUIZZES_ADMINS;
 public class AddAdminActivity extends AppCompatActivity {
 
     @BindView(R.id.admin_email)
-    EditText email;
+    EditText emailET;
 
     private ArrayList<Admin> adminList;
 
@@ -37,19 +37,20 @@ public class AddAdminActivity extends AppCompatActivity {
     }
 
     public void addAdmin(View view) {
-        String mail = email.getText().toString();
+        String mail = emailET.getText().toString().toString().replace(".", "-");
         boolean isPresent = false;
         Iterator iter = adminList.iterator();
         while (iter.hasNext()) {
-            if (((Admin) iter).getEmail().equals(email.getText().toString())) {
+            if (((Admin) iter.next()).getEmail().equals(mail)) {
                 isPresent = true;
             }
         }
         if (isPresent) {
-            Toast.makeText(getApplicationContext(), "Tento email uz je administrator!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Tento emailET uz je administrator!", Toast.LENGTH_LONG).show();
         } else {
             adminList.add(new Admin("", mail));
             FirebaseDatabase.getInstance().getReference(QUIZZES_ADMINS).setValue(adminList);
+            emailET.getText().clear();
         }
     }
 
@@ -57,7 +58,7 @@ public class AddAdminActivity extends AppCompatActivity {
         boolean isPresent = false;
         Iterator iter = adminList.iterator();
         while (iter.hasNext()) {
-            if (((Admin) iter.next()).getEmail().equals(email.getText().toString())) {
+            if (((Admin) iter.next()).getEmail().equals(emailET.getText().toString().replace(".", "-"))) {
                 iter.remove();
                 isPresent = true;
             }
@@ -65,7 +66,7 @@ public class AddAdminActivity extends AppCompatActivity {
         if (isPresent) {
             FirebaseDatabase.getInstance().getReference(QUIZZES_ADMINS).setValue(adminList);
         } else {
-            Toast.makeText(getApplicationContext(), "Tento email nieje administrator!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Tento emailET nieje administrator!", Toast.LENGTH_LONG).show();
         }
     }
 }
