@@ -60,7 +60,7 @@ public class TeamDetailActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
-                        database.getReference(QUIZZES_TEAMS.concat("/").concat(mUid)).removeValue();
+                        database.getReference(QUIZZES_TEAMS.concat("/").concat(mTeamData.getName())).removeValue();
                         finish();
                     }
                 });
@@ -86,9 +86,9 @@ public class TeamDetailActivity extends AppCompatActivity {
                         if (!userMail.equals("") & !(userMail == null)) {
                             mTeamData.getUsersRegistered().add(userMail);
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
-                            database.getReference(QUIZZES_TEAMS.concat("/").concat(mUid)).setValue(mTeamData);
+                            database.getReference(QUIZZES_TEAMS.concat("/").concat(mTeamData.getName())).setValue(mTeamData);
                         } else {
-                            Toast.makeText(getApplicationContext(), "Nedobry emailET!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Zly email!", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -114,12 +114,12 @@ public class TeamDetailActivity extends AppCompatActivity {
                         if (!userMail.equals("") & !(userMail == null)) {
                             if (mTeamData.getUsersRegistered().remove(userMail)) {
                                 FirebaseDatabase database = FirebaseDatabase.getInstance();
-                                database.getReference(QUIZZES_TEAMS.concat("/").concat(mUid)).setValue(mTeamData);
+                                database.getReference(QUIZZES_TEAMS.concat("/").concat(mTeamData.getName())).setValue(mTeamData);
                             } else {
                                 Toast.makeText(getApplicationContext(), "Clen s takymto emailom v teame nieje!", Toast.LENGTH_LONG).show();
                             }
                         } else {
-                            Toast.makeText(getApplicationContext(), "Nedobry emailET!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Nedobry email!", Toast.LENGTH_LONG).show();
                         }
                     }
                 });

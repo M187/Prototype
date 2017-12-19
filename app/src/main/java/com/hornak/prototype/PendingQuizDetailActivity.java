@@ -207,7 +207,7 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
         final ProgressDialog pd = ProgressDialog.show(this, "", "Loading. Please wait...", true);
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         for (Team team : quiz.getTeams()) {
-            db.getReference(QUIZZES_TEAMS.concat("/").concat(team.getUid()).concat("/quizDatas/")).child(quiz.getName()).setValue(new QuizData(quiz.getName(), team.getPointsAchieved()));
+            db.getReference(QUIZZES_TEAMS.concat("/").concat(team.getName()).concat("/quizDatas/")).child(quiz.getName()).setValue(new QuizData(quiz.getName(), team.getPointsAchieved()));
             updateTeamOverallPoints(team, db);
         }
         new Thread(new Runnable() {
@@ -230,7 +230,7 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
     }
 
     private void updateTeamOverallPoints(final Team team, final FirebaseDatabase db) {
-        db.getReference(QUIZZES_TEAMS.concat("/").concat(team.getUid())).addListenerForSingleValueEvent(new ValueEventListener() {
+        db.getReference(QUIZZES_TEAMS.concat("/").concat(team.getName())).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 TeamData temp = dataSnapshot.getValue(TeamData.class);
@@ -240,7 +240,7 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
                 } catch (NullPointerException e) {
                     newPoints = team.pointsAchieved;
                 }
-                db.getReference(QUIZZES_TEAMS.concat("/").concat(team.getUid())).child("points").setValue(newPoints);
+                db.getReference(QUIZZES_TEAMS.concat("/").concat(team.getName())).child("points").setValue(newPoints);
             }
 
             @Override

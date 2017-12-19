@@ -27,7 +27,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.hornak.prototype.model.Admin;
 import com.hornak.prototype.model.User;
 import com.hornak.prototype.model.teams.TeamData;
 import com.hornak.prototype.ui.FadingImageViewHandler;
@@ -35,21 +34,17 @@ import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
 
     public static final String QUIZZES_KEY_FUTURE = "QUIZZES_NODE_FUTURE";
     public static final String QUIZZES_KEY_PAST = "QUIZZES_NODE_PAST";
     public static final String QUIZZES_TEAMS = "QUIZZES_TEAMS";
-    public static final String QUIZZES_ADMINS = "ADMINS";
     public static final String QUIZZES_USERS = "USERS";
 
     public static final String DATE_FORMAT = "DD-MMM-YYYY";
     public static FirebaseUser mFirebaseUser;
     public static TeamData mTeamData;
+    public static User mUserData;
     // Firebase instance variables
     private static FirebaseAuth mFirebaseAuth;
     FloatingActionButton rightLowerButton;
@@ -61,10 +56,6 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
     private FadingImageViewHandler fadingImageViewHandler;
     private boolean isFabOpened = false;
 
-    private ArrayList<User> userList = new ArrayList<>();
-    private ArrayList<Admin> adminList = new ArrayList<>();
-    private boolean isAdmin = false;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,20 +63,20 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
         Firebase.setAndroidContext(this);
         Firebase.getDefaultConfig().setPersistenceEnabled(true);
 
-        // Initialize Firebase Auth
-//        mFirebaseAuth = FirebaseAuth.getInstance();
-//        mFirebaseUser = mFirebaseAuth.getCurrentUser();
-//        if (mFirebaseUser == null) {
-//            // Not signed in, launch the Sign In activity
-//            startActivity(new Intent(this, SignInActivity.class));
-//            finish();
-//            return;
-//        } else {
-//            mUsername = mFirebaseUser.getDisplayName();
-//            if (mFirebaseUser.getPhotoUrl() != null) {
-//                mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
-//            }
-//        }
+//      Initialize Firebase Auth
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        if (mFirebaseUser == null) {
+            // Not signed in, launch the Sign In activity
+            startActivity(new Intent(this, SignInActivity.class));
+            finish();
+            return;
+        } else {
+            mUsername = mFirebaseUser.getDisplayName();
+            if (mFirebaseUser.getPhotoUrl() != null) {
+                mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
+            }
+        }
 
         setContentView(R.layout.activity_main);
         mPhotoView = (ImageView) findViewById(R.id.photo_toolbar);
@@ -95,52 +86,17 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
 
         frbsHelper = new FirebaseHelper(FirebaseDatabase.getInstance().getReference(QUIZZES_KEY_FUTURE));
 
-        //<editor-fold desc="TEAMS listener">
-        //DatabaseReference ref = FirebaseDatabase.getInstance().getReference(QUIZZES_TEAMS.concat("/").concat(mFirebaseUser.getUid()));
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(QUIZZES_TEAMS);
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                try {
-                    mTeamData = dataSnapshot.child("4b9f2ece-33e1-4f03-abda-b61e86c0f8ab").getValue(TeamData.class);
-                    ((ViewManager) rightLowerButton.getParent()).removeView(rightLowerButton);
-                } catch (NullPointerException e) {
-                }
-                setupFab();
-            }
-            @Override
-            public void onCancelled(DatabaseError firebaseError) {
-            }
-        });
-        //</editor-fold>
-
-        //<editor-fold desc="ADMINS listener">
-        DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference(QUIZZES_ADMINS);
-        ref2.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Iterator iter = dataSnapshot.getChildren().iterator();
-                while (iter.hasNext()) {
-                    adminList.add(((DataSnapshot) iter.next()).getValue(Admin.class));
-                }
-                isAdmin = isUserAdmin(adminList);
-                setupFab();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError firebaseError) {
-            }
-        });
-        //</editor-fold>
-
         //<editor-fold desc="USERS listener">
-        DatabaseReference ref3 = FirebaseDatabase.getInstance().getReference(QUIZZES_USERS);
+        DatabaseReference ref3 = FirebaseDatabase.getInstance().getReference(QUIZZES_USERS.concat("/").concat(mFirebaseUser.getEmail().replace(".", "-")));
         ref3.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Iterator iter = dataSnapshot.getChildren().iterator();
-                while (iter.hasNext()) {
-                    userList.add(((DataSnapshot) iter.next()).getValue(User.class));
+                mUserData = dataSnapshot.getValue(User.class);
+                setupFab();
+                if (mUserData.getTeam() != null && !mUserData.equals("")) {
+                    getMyTeamData();
+                } else {
+                    mTeamData = null;
                 }
             }
 
@@ -161,7 +117,6 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
 
         //replace default fragment
         replaceFragment(new FutureQuizFragment());
-
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -180,6 +135,25 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
+
+        setupFab();
+    }
+
+    private void getMyTeamData() {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(QUIZZES_TEAMS.concat("/").concat(mUserData.getTeam()));
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    mTeamData = dataSnapshot.getValue(TeamData.class);
+                }
+                setupFab();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError firebaseError) {
             }
         });
     }
@@ -215,11 +189,18 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
         super.onResume();
     }
 
-
     private void setupFab() {
-        if (isAdmin) {
-            setupFabAdmin();
-        } else {
+        try {
+            ((ViewManager) rightLowerButton.getParent()).removeView(rightLowerButton);
+        } catch (NullPointerException e) {
+        }
+        try {
+            if (mUserData.admin) {
+                setupFabAdmin();
+            } else {
+                setupFabUser();
+            }
+        } catch (NullPointerException e) {
             setupFabUser();
         }
     }
@@ -274,7 +255,6 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
             @Override
             public void onClick(View v) {
                 Intent temp = new Intent(getApplicationContext(), AddAdminActivity.class);
-                temp.putParcelableArrayListExtra(QUIZZES_ADMINS, adminList);
                 startActivity(temp);
                 rightLowerButton.callOnClick();
             }
@@ -405,18 +385,6 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
         });
     }
 
-    public boolean isUserAdmin(List<Admin> adminAccountsList) {
-        Iterator iter = adminAccountsList.iterator();
-        while (iter.hasNext()) {
-            if (((Admin) iter.next()).getEmail().equals("dony66@gmail.com".replace(".", "-"))) {
-                //if (((Admin) iter.next()).getEmail().equals(mFirebaseUser.getEmail().replace(".", "-"))) {
-                return true;
-            }
-        }
-        //todo set to false. For now it is always admin.
-        return true;
-    }
-
     public static class RegisterNewTeam extends AppCompatActivity {
 
         @Override
@@ -428,10 +396,10 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
         public void addTeam(View view) {
 
             // todo - UID hardcoded for now
-            //final String myUID = mFirebaseUser.getUid();
-            //String myEmail = mFirebaseUser.getEmail();
-            final String myUID = "4b9f2ece-33e1-4f03-abda-b61e86c0f8ab";
-            String myEmail = "dony66@gmail.com";
+            final String myUID = mFirebaseUser.getUid();
+            String myEmail = mFirebaseUser.getEmail();
+            //final String myUID = "4b9f2ece-33e1-4f03-abda-b61e86c0f8ab";
+            //String myEmail = "dony66@gmail.com";
 
             final TeamData teamData = new TeamData(((EditText) findViewById(R.id.team_name)).getText().toString(), myUID, myEmail, 0);
 
@@ -443,7 +411,8 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
-                            database.getReference(QUIZZES_TEAMS).child(teamData.getUid()).setValue(teamData);
+                            database.getReference(QUIZZES_TEAMS.concat("/").concat(teamData.getName())).setValue(teamData);
+                            database.getReference(QUIZZES_USERS).child(mUserData.getEmail()).child("team").setValue(teamData.getName());
                             finish();
                         }
                     });
