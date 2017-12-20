@@ -10,13 +10,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.hornak.prototype.model.User;
 import com.hornak.prototype.model.teams.TeamData;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.hornak.prototype.MainActivity.QUIZZES_TEAMS;
+import static com.hornak.prototype.MainActivity.QUIZZES_USERS;
 
 /**
  * Created by michal.hornak on 12/14/2017.
@@ -82,11 +88,32 @@ public class TeamDetailActivity extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String userMail = memberMailTV.getText().toString();
+                        final String userMail = memberMailTV.getText().toString().replace(".", "-");
                         if (!userMail.equals("") & !(userMail == null)) {
-                            mTeamData.getUsersRegistered().add(userMail);
-                            FirebaseDatabase database = FirebaseDatabase.getInstance();
-                            database.getReference(QUIZZES_TEAMS.concat("/").concat(mTeamData.getName())).setValue(mTeamData);
+                            // check if user exist
+                            final FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            DatabaseReference ref = database.getReference(QUIZZES_USERS.concat("/").concat(userMail));
+                            ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.exists()) {
+                                        User user = dataSnapshot.getValue(User.class);
+                                        if (user.getTeam() == null || user.getTeam() == "") {
+                                            mTeamData.getUsersRegistered().add(userMail);
+                                            database.getReference(QUIZZES_TEAMS.concat("/").concat(mTeamData.getName())).setValue(mTeamData);
+                                            database.getReference(QUIZZES_USERS.concat("/").concat(userMail).concat("/").concat("team")).setValue(mTeamData.getName());
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), "Pouzivatel uz je v nejakom teame.", Toast.LENGTH_LONG).show();
+                                        }
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), "Pouzivatel neexistuje.", Toast.LENGTH_LONG).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                }
+                            });
                         } else {
                             Toast.makeText(getApplicationContext(), "Zly email!", Toast.LENGTH_LONG).show();
                         }
@@ -115,6 +142,8 @@ public class TeamDetailActivity extends AppCompatActivity {
                             if (mTeamData.getUsersRegistered().remove(userMail)) {
                                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                                 database.getReference(QUIZZES_TEAMS.concat("/").concat(mTeamData.getName())).setValue(mTeamData);
+                                database.getReference(QUIZZES_USERS.concat("/").concat(userMail).concat("/").concat("team")).removeValue();
+
                             } else {
                                 Toast.makeText(getApplicationContext(), "Clen s takymto emailom v teame nieje!", Toast.LENGTH_LONG).show();
                             }

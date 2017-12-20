@@ -104,8 +104,8 @@ public class FirebaseHelper {
         testUserRegisteredToTeam1.add("DrBuServant2@gmail-com");
         TeamData testTeamData1 = new TeamData("myTeam1", "1", "DrBu@gmail.com", 0);
         testTeamData1.usersRegistered = testUserRegisteredToTeam1;
-        testTeamMap.put("1-2-3-4-5", testTeamData1);
-        testTeamMap.put("1-2-3-4-4", new TeamData("myTeam2", "2", "DrHo@gmail.com", 0));
+        testTeamMap.put(testTeamData1.getName(), testTeamData1);
+        testTeamMap.put("myTeam2", new TeamData("myTeam2", "2", "DrHo@gmail.com", 0));
         db.getDatabase().getReference(QUIZZES_TEAMS).setValue(testTeamMap);
     }
 
