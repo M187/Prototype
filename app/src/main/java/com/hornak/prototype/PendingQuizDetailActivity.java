@@ -127,7 +127,6 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
     }
 
     public void signUpTeamClick(View view) {
-        //todo - validate if there is room
         if (mTeamData == null) {
             Toast.makeText(getApplicationContext(), "Nemas registrovany team!", Toast.LENGTH_LONG).show();
         } else if (!isMyTeamRegistered) {

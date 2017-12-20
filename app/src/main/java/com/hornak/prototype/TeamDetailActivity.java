@@ -59,19 +59,22 @@ public class TeamDetailActivity extends AppCompatActivity {
         teamNameTV.setText(mTeamData.getName());
         overallPointsTV.setText(String.valueOf(mTeamData.getPoints()));
         setTeamMembers();
-        //todo: points
     }
 
     private void setTeamMembers() {
         Iterator usersMail = mTeamData.getUsersRegistered().iterator();
+        LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT);
+        float d = getApplicationContext().getResources().getDisplayMetrics().density;
+        TextView ownerEmail = new TextView(getBaseContext());
+
+        ownerEmail.setText(mTeamData.getOwnerEmail());
+        llp.setMargins((int) (15 * d), 0, 0, 0);
+        ownerEmail.setLayoutParams(llp);
+        memberListLL.addView(ownerEmail);
+
         while (usersMail.hasNext()) {
             TextView memberEmail = new TextView(getBaseContext());
-
-            float d = getApplicationContext().getResources().getDisplayMetrics().density;
             memberEmail.setText((String) usersMail.next());
-            LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT);
-            llp.setMargins((int) (15 * d), 0, 0, 0);
-
             memberEmail.setLayoutParams(llp);
             memberListLL.addView(memberEmail);
         }

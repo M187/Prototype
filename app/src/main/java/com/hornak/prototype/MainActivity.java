@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
         Firebase.setAndroidContext(this);
         Firebase.getDefaultConfig().setPersistenceEnabled(true);
 
-//      Initialize Firebase Auth
+        //<editor-fold desc="Initialize Firebase Auth">
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
         if (mFirebaseUser == null) {
@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
                 mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
             }
         }
+        //</editor-fold>
 
         setContentView(R.layout.activity_main);
         mPhotoView = (ImageView) findViewById(R.id.photo_toolbar);
@@ -87,15 +88,21 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
         frbsHelper = new FirebaseHelper(FirebaseDatabase.getInstance().getReference(QUIZZES_KEY_FUTURE));
 
         //<editor-fold desc="USERS listener">
-        DatabaseReference ref3 = FirebaseDatabase.getInstance().getReference(QUIZZES_USERS.concat("/").concat(mFirebaseUser.getEmail().replace(".", "-")));
+        final DatabaseReference ref3 = FirebaseDatabase.getInstance().getReference(QUIZZES_USERS.concat("/").concat(mFirebaseUser.getEmail().replace(".", "-")));
         ref3.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                mUserData = dataSnapshot.getValue(User.class);
-                setupFab();
-                if (mUserData.getTeam() != null && !mUserData.equals("")) {
-                    getMyTeamData();
+                if (dataSnapshot.exists()) {
+                    mUserData = dataSnapshot.getValue(User.class);
+                    setupFab();
+                    if (mUserData.getTeam() != null && !mUserData.equals("")) {
+                        getMyTeamData();
+                    } else {
+                        mTeamData = null;
+                    }
                 } else {
+                    mUserData = new User(mFirebaseUser.getUid(), mFirebaseUser.getEmail().replace(".", "-"), false);
+                    ref3.setValue(mUserData);
                     mTeamData = null;
                 }
             }
@@ -395,12 +402,8 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
 
         public void addTeam(View view) {
 
-            // todo - UID hardcoded for now
             final String myUID = mFirebaseUser.getUid();
-            String myEmail = mFirebaseUser.getEmail();
-            //final String myUID = "4b9f2ece-33e1-4f03-abda-b61e86c0f8ab";
-            //String myEmail = "dony66@gmail.com";
-
+            String myEmail = mFirebaseUser.getEmail().replace(".", "-");
             final TeamData teamData = new TeamData(((EditText) findViewById(R.id.team_name)).getText().toString(), myUID, myEmail, 0);
 
             AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.myDialog));
