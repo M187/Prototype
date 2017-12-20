@@ -2,11 +2,13 @@ package com.hornak.prototype;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +19,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.hornak.prototype.model.User;
 import com.hornak.prototype.model.teams.TeamData;
+
+import java.util.Iterator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,6 +43,8 @@ public class TeamDetailActivity extends AppCompatActivity {
     TextView overallPointsTV;
     @BindView(R.id.member_mail)
     EditText memberMailTV;
+    @BindView(R.id.memeber_list)
+    LinearLayout memberListLL;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,10 +58,24 @@ public class TeamDetailActivity extends AppCompatActivity {
 
         teamNameTV.setText(mTeamData.getName());
         overallPointsTV.setText(String.valueOf(mTeamData.getPoints()));
-
+        setTeamMembers();
         //todo: points
     }
 
+    private void setTeamMembers() {
+        Iterator usersMail = mTeamData.getUsersRegistered().iterator();
+        while (usersMail.hasNext()) {
+            TextView memberEmail = new TextView(getBaseContext());
+
+            float d = getApplicationContext().getResources().getDisplayMetrics().density;
+            memberEmail.setText((String) usersMail.next());
+            LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT);
+            llp.setMargins((int) (15 * d), 0, 0, 0);
+
+            memberEmail.setLayoutParams(llp);
+            memberListLL.addView(memberEmail);
+        }
+    }
 
     public void eraseTeam(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.myDialog));

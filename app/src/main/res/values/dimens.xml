@@ -14,7 +14,7 @@
 
     <dimen name="toolbar_max_height">250dp</dimen>
 
-    <dimen name="view_default_margin">10dp</dimen>
+    <dimen name="view_default_margin">5dp</dimen>
 
 
     <!-- Default screen margins, per the Android Design guidelines. -->
