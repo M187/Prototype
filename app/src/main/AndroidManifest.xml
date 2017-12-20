@@ -29,7 +29,11 @@
             android:name=".AddQuizActivity"
             android:parentActivityName=".MainActivity" />
 
-        <activity android:name=".SignInActivity" />
+        <activity
+            android:name=".SignInActivity"
+            android:hardwareAccelerated="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/myDialog" />
 
         <activity
             android:name=".MainActivity$RegisterNewTeam"
