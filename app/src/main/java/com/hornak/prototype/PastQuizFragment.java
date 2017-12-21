@@ -1,5 +1,6 @@
 package com.hornak.prototype;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -84,9 +85,10 @@ public class PastQuizFragment extends Fragment {
         @Override
         public void onClick(View view) {
             Intent temp = new Intent(view.getContext(), QuizDetailActivity.class);
+            Bundle bundle = ActivityOptions.makeCustomAnimation(view.getContext(), android.R.anim.fade_in, android.R.anim.fade_out).toBundle();
             this.getLayoutPosition();
             temp.putExtra("QUIZ", mQuiz);
-            view.getContext().startActivity(temp);
+            view.getContext().startActivity(temp, bundle);
         }
     }
 }
