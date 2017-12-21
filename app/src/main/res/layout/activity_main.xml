@@ -57,10 +57,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="@drawable/tab_bar_gradient"
             app:tabIndicatorHeight="5dp"
-            app:tabSelectedTextColor="@color/cardview_light_background"
-            app:tabTextColor="@color/divider" />
+            app:tabSelectedTextColor="@color/white"
+            app:tabTextColor="@color/black" />
 
     </android.support.design.widget.AppBarLayout>
 </android.support.design.widget.CoordinatorLayout>
