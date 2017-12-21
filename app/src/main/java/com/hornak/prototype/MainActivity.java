@@ -208,6 +208,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
                 setupFabUser();
             }
         } catch (NullPointerException e) {
+            // todo: unregistered user
             setupFabUser();
         }
     }

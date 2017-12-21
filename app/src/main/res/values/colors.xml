@@ -16,6 +16,9 @@
 -->
 
 <resources>
+
+    <!--http://www.color-hex.com/color-palettes/-->
+
     <color name="photo_placeholder">#f7f1ea</color>
 
     <color name="theme_primary">#04561A</color>
@@ -42,9 +45,8 @@
     <color name="background_tint_red">#66F44336</color>
     <color name="background_tint_green">#6604561A</color>
 
-
     <color name="black">#000</color>
-    <color name="button_background">#4f1515</color>
+    <color name="button_background">#F44336</color>
     <color name="button_text">#ffffff</color>
 
 </resources>

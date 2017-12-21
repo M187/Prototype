@@ -31,6 +31,7 @@ import static com.hornak.prototype.MainActivity.QUIZZES_KEY_FUTURE;
 import static com.hornak.prototype.MainActivity.QUIZZES_KEY_PAST;
 import static com.hornak.prototype.MainActivity.QUIZZES_TEAMS;
 import static com.hornak.prototype.MainActivity.mTeamData;
+import static com.hornak.prototype.MainActivity.mUserData;
 
 /**
  * Created by michal.hornak on 11/28/2017.
@@ -52,6 +53,10 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
     TextView teamPlaceAvailability;
     @BindView(R.id.sign_up_team)
     Button signUpTeamButton;
+    @BindView(R.id.move_to_done_button)
+    Button moveToDoneButton;
+    @BindView(R.id.header_layout)
+    LinearLayout headerLayout;
 
     View quizTeamLayout;
     boolean isMyTeamRegistered = false;
@@ -72,6 +77,13 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
 
         this.signUpTeamButton.setClickable(false);
         setupTeams();
+
+        if (mUserData.admin) {
+            moveToDoneButton.setVisibility(View.VISIBLE);
+        } else {
+            moveToDoneButton.setVisibility(View.GONE);
+        }
+        headerLayout.invalidate();
     }
 
     private void checkSignUpTeamButtonLogic() {

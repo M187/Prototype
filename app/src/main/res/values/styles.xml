@@ -20,7 +20,7 @@
     <style name="MyStyle" parent="@style/Theme.AppCompat.Light.NoActionBar">
 
         <!-- colorPrimary is used for the default action bar background -->
-        <item name="colorPrimary">#4f1515</item>
+        <item name="colorPrimary">#F44336</item>
         <!-- colorPrimaryDark is used for the status bar -->
         <item name="colorPrimaryDark">#000</item>
         <item name="android:textColor">#000</item>
