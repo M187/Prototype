@@ -3,6 +3,7 @@ package com.hornak.prototype;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
@@ -122,10 +123,11 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
                 quiz = snapshot.getValue(Quiz.class);
                 teamsPlaceholder.removeAllViews();
                 try {
-                    for (Team team : quiz.getTeams()) {
-                        quizTeamLayout = getLayoutInflater().inflate(R.layout.team_line, teamsPlaceholder, false);
-                        ((TextView) quizTeamLayout.findViewById(R.id.team_name)).setText(team.getName());
-                        teamsPlaceholder.addView(quizTeamLayout);
+                    addTeamsHeader();
+                    if (mUserData.isAdmin()) {
+                        createTeamLayoutForAdmin();
+                    } else {
+                        createTeamLayoutBasic();
                     }
                 } catch (NullPointerException e) {
                 }
@@ -134,6 +136,49 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+            }
+
+            private void addTeamsHeader() {
+                quizTeamLayout = getLayoutInflater().inflate(R.layout.team_line, teamsPlaceholder, false);
+                ((TextView) quizTeamLayout.findViewById(R.id.team_name)).setText("Meno");
+                ((TextView) quizTeamLayout.findViewById(R.id.team_points)).setText("Body");
+
+                LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT);
+                float d = getApplicationContext().getResources().getDisplayMetrics().density;
+                //llp.setMargins((int) (15 * d), 0, 0, 0);
+                quizTeamLayout.setLayoutParams(llp);
+
+                teamsPlaceholder.addView(quizTeamLayout);
+            }
+
+            private void createTeamLayoutForAdmin() {
+                for (Team team : quiz.getTeams()) {
+                    quizTeamLayout = getLayoutInflater().inflate(R.layout.team_line, teamsPlaceholder, false);
+                    ((TextView) quizTeamLayout.findViewById(R.id.team_name)).setText(team.getName());
+                    try {
+                        if (team.getPointsAchieved() > 0) {
+                            ((TextView) quizTeamLayout.findViewById(R.id.team_points)).setText(String.valueOf(team.getPointsAchieved()));
+                        }
+                    } catch (NullPointerException e) {
+                    }
+                    quizTeamLayout.findViewById(R.id.edit_team_points).setVisibility(View.VISIBLE);
+                    quizTeamLayout.invalidate();
+                    teamsPlaceholder.addView(quizTeamLayout);
+                }
+            }
+
+            private void createTeamLayoutBasic() {
+                for (Team team : quiz.getTeams()) {
+                    quizTeamLayout = getLayoutInflater().inflate(R.layout.team_line, teamsPlaceholder, false);
+                    ((TextView) quizTeamLayout.findViewById(R.id.team_name)).setText(team.getName());
+                    try {
+                        if (team.getPointsAchieved() > 0) {
+                            ((TextView) quizTeamLayout.findViewById(R.id.team_points)).setText(String.valueOf(team.getPointsAchieved()));
+                        }
+                    } catch (NullPointerException e) {
+                    }
+                    teamsPlaceholder.addView(quizTeamLayout);
+                }
             }
         });
     }
@@ -258,6 +303,10 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+
+    }
+
+    public void editPoints(View view) {
 
     }
 }
