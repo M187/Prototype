@@ -176,6 +176,7 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
     private void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
     }
