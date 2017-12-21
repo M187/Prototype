@@ -2,13 +2,15 @@ package com.hornak.prototype;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -141,12 +143,14 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
             private void addTeamsHeader() {
                 quizTeamLayout = getLayoutInflater().inflate(R.layout.team_line, teamsPlaceholder, false);
                 ((TextView) quizTeamLayout.findViewById(R.id.team_name)).setText("Meno");
+                ((TextView) quizTeamLayout.findViewById(R.id.team_name)).setTypeface(null, Typeface.BOLD);
                 ((TextView) quizTeamLayout.findViewById(R.id.team_points)).setText("Body");
+                ((TextView) quizTeamLayout.findViewById(R.id.team_points)).setTypeface(null, Typeface.BOLD);
 
-                LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT);
-                float d = getApplicationContext().getResources().getDisplayMetrics().density;
+                //LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT);
+                //float d = getApplicationContext().getResources().getDisplayMetrics().density;
                 //llp.setMargins((int) (15 * d), 0, 0, 0);
-                quizTeamLayout.setLayoutParams(llp);
+                //quizTeamLayout.setLayoutParams(llp);
 
                 teamsPlaceholder.addView(quizTeamLayout);
             }
@@ -307,6 +311,36 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
     }
 
     public void editPoints(View view) {
+        final String teamName = ((TextView) ((ViewGroup) view.getParent().getParent()).findViewById(R.id.team_name)).getText().toString();
+        final EditText taskEditText = new EditText(this);
+
+        AlertDialog dialog = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.myDialog))
+                .setCancelable(true)
+                .setMessage("Zadaj dosiahnute body teamu.")
+                .setView(taskEditText)
+                .setPositiveButton("Ano",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                try {
+                                    for (Team team : quiz.getTeams()) {
+                                        if (team.name.equals(teamName)) {
+                                            team.pointsAchieved = Integer.valueOf(taskEditText.getText().toString());
+                                        }
+                                    }
+                                    FirebaseDatabase.getInstance().getReference(QUIZZES_KEY_FUTURE.concat("/").concat(quiz.getName()).concat("/teams")).setValue(quiz.getTeams());
+                                } catch (Exception e) {
+                                    Toast.makeText(getApplicationContext(), "Zle data.", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        })
+                .setNegativeButton("Nie", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .create();
+        dialog.show();
 
     }
 }
