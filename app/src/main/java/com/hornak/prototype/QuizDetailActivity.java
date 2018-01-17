@@ -50,7 +50,7 @@ public class QuizDetailActivity extends AppCompatActivity {
         quizPlace.setText("Miesto: ".concat(quiz.getPlace()));
 
         for (Team team : quiz.getTeams()) {
-            quizTeamLayout = getLayoutInflater().inflate(R.layout.team_line, teamsPlaceholder, false);
+            quizTeamLayout = getLayoutInflater().inflate(R.layout.team_line_quizzes, teamsPlaceholder, false);
             ((TextView) quizTeamLayout.findViewById(R.id.team_name)).setText(team.getName());
             ((TextView) quizTeamLayout.findViewById(R.id.team_points)).setText(String.valueOf(team.getPointsAchieved()));
             teamsPlaceholder.addView(quizTeamLayout);

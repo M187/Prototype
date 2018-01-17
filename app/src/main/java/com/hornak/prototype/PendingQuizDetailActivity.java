@@ -141,7 +141,7 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
             }
 
             private void addTeamsHeader() {
-                quizTeamLayout = getLayoutInflater().inflate(R.layout.team_line, teamsPlaceholder, false);
+                quizTeamLayout = getLayoutInflater().inflate(R.layout.team_line_quizzes, teamsPlaceholder, false);
                 ((TextView) quizTeamLayout.findViewById(R.id.team_name)).setText("Meno");
                 ((TextView) quizTeamLayout.findViewById(R.id.team_name)).setTypeface(null, Typeface.BOLD);
                 ((TextView) quizTeamLayout.findViewById(R.id.team_points)).setText("Body");
@@ -157,7 +157,7 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
 
             private void createTeamLayoutForAdmin() {
                 for (Team team : quiz.getTeams()) {
-                    quizTeamLayout = getLayoutInflater().inflate(R.layout.team_line, teamsPlaceholder, false);
+                    quizTeamLayout = getLayoutInflater().inflate(R.layout.team_line_quizzes, teamsPlaceholder, false);
                     ((TextView) quizTeamLayout.findViewById(R.id.team_name)).setText(team.getName());
                     try {
                         if (team.getPointsAchieved() > 0) {
@@ -173,7 +173,7 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
 
             private void createTeamLayoutBasic() {
                 for (Team team : quiz.getTeams()) {
-                    quizTeamLayout = getLayoutInflater().inflate(R.layout.team_line, teamsPlaceholder, false);
+                    quizTeamLayout = getLayoutInflater().inflate(R.layout.team_line_quizzes, teamsPlaceholder, false);
                     ((TextView) quizTeamLayout.findViewById(R.id.team_name)).setText(team.getName());
                     try {
                         if (team.getPointsAchieved() > 0) {
