@@ -62,6 +62,7 @@ public class LeagueFragment extends Fragment {
                             return lhs.compareTo(rhs);
                         }
                     });
+                    Collections.sort(teamDataList, Collections.<TeamData>reverseOrder());
                     try {
                         teamLadderAdapter.notifyDataSetChanged();
                     } catch (NullPointerException e) {
@@ -81,13 +82,14 @@ public class LeagueFragment extends Fragment {
 
         public TeamLadderViewHolder(View view) {
             super(view);
+
             this.teamName = (TextView) view.findViewById(R.id.team_name);
             this.teamPoints = (TextView) view.findViewById(R.id.team_points);
         }
 
         public void bindView(TeamData teamData) {
-            this.teamName.setText(teamData.getName());
-            this.teamPoints.setText(teamData.getPoints());
+            this.teamName.setText(String.valueOf(teamData.getName()));
+            this.teamPoints.setText(String.valueOf(teamData.getPoints()));
         }
     }
 
