@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.hornak.prototype.model.quizzes.Quiz;
 import com.hornak.prototype.model.quizzes.Team;
 
@@ -19,7 +21,7 @@ import butterknife.ButterKnife;
  * Created by michal.hornak on 11/28/2017.
  */
 
-public class QuizDetailActivity extends AppCompatActivity {
+public class PastQuizDetailActivity extends AppCompatActivity {
 
     @BindView(R.id.quiz_name)
     TextView quizName;
@@ -51,6 +53,11 @@ public class QuizDetailActivity extends AppCompatActivity {
 
         for (Team team : quiz.getTeams()) {
             quizTeamLayout = getLayoutInflater().inflate(R.layout.team_line_quizzes, teamsPlaceholder, false);
+
+            Glide.with(getApplicationContext())
+                    .load("https://firebasestorage.googleapis.com/v0/b/pubquizapp-8129c.appspot.com/o/testData.jpg?alt=media&token=4907ee29-bdfa-48a5-b7e8-f2f51e3e7c34")
+                    .into((ImageView) quizTeamLayout.findViewById(R.id.team_photo));
+
             ((TextView) quizTeamLayout.findViewById(R.id.team_name)).setText(team.getName());
             ((TextView) quizTeamLayout.findViewById(R.id.team_points)).setText(String.valueOf(team.getPointsAchieved()));
             teamsPlaceholder.addView(quizTeamLayout);

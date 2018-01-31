@@ -84,7 +84,7 @@ public class PastQuizFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
-            Intent temp = new Intent(view.getContext(), QuizDetailActivity.class);
+            Intent temp = new Intent(view.getContext(), PastQuizDetailActivity.class);
             Bundle bundle = ActivityOptions.makeCustomAnimation(view.getContext(), android.R.anim.fade_in, android.R.anim.fade_out).toBundle();
             this.getLayoutPosition();
             temp.putExtra("QUIZ", mQuiz);

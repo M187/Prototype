@@ -24,7 +24,7 @@ import static com.hornak.prototype.MainActivity.QUIZZES_KEY_FUTURE;
  * Created by michal.hornak on 12/5/2017.
  */
 
-public class FutureQuizFragment extends Fragment {
+public class PendingQuizFragment extends Fragment {
 
 
     FirebaseRecyclerAdapter mFirebaseAdapter;

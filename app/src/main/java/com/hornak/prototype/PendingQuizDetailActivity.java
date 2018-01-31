@@ -11,10 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -158,6 +160,11 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
             private void createTeamLayoutForAdmin() {
                 for (Team team : quiz.getTeams()) {
                     quizTeamLayout = getLayoutInflater().inflate(R.layout.team_line_quizzes, teamsPlaceholder, false);
+
+                    Glide.with(getApplicationContext())
+                            .load("https://firebasestorage.googleapis.com/v0/b/pubquizapp-8129c.appspot.com/o/testData.jpg?alt=media&token=4907ee29-bdfa-48a5-b7e8-f2f51e3e7c34")
+                            .into((ImageView) quizTeamLayout.findViewById(R.id.team_photo));
+
                     ((TextView) quizTeamLayout.findViewById(R.id.team_name)).setText(team.getName());
                     try {
                         if (team.getPointsAchieved() > 0) {

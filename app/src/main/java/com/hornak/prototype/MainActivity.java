@@ -123,12 +123,12 @@ public class MainActivity extends AppCompatActivity implements AppBarLayout.OnOf
         tabLayout.addTab(tabLayout.newTab().setText("Liga"));
 
         //replace default fragment
-        replaceFragment(new FutureQuizFragment());
+        replaceFragment(new PendingQuizFragment());
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getPosition() == 0) {
-                    replaceFragment(new FutureQuizFragment());
+                    replaceFragment(new PendingQuizFragment());
                 } else if (tab.getPosition() == 1) {
                     replaceFragment(new PastQuizFragment());
                 } else if (tab.getPosition() == 2) {
