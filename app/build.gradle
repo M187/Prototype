@@ -32,6 +32,7 @@ android {
 }
 
 ext.supportLV = '25.3.1'
+ext.firebaseLV = '11.8.0'
 
 //firebase
 //https://medium.com/@dekoservidoni/realtime-chats-with-firebase-in-android-a2a131f94e0c
@@ -53,12 +54,12 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
-    compile 'com.google.android.gms:play-services-auth:11.8.0'
+    compile "com.google.android.gms:play-services-auth:$firebaseLV"
     compile 'com.firebase:firebase-client-android:2.5.0'
-    compile "com.google.firebase:firebase-database:11.8.0"
-    compile 'com.google.firebase:firebase-auth:11.8.0'
+    compile "com.google.firebase:firebase-database:$firebaseLV"
+    compile "com.google.firebase:firebase-auth:$firebaseLV"
+    compile "com.google.firebase:firebase-storage:$firebaseLV"
     compile "com.firebaseui:firebase-ui-database:1.2.0"
-    compile 'com.google.firebase:firebase-firestore:11.8.0'
 
     compile 'com.oguzdev:CircularFloatingActionMenu:1.0.2'
 }

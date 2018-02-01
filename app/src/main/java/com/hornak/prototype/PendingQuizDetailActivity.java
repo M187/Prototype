@@ -2,11 +2,17 @@ package com.hornak.prototype;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -17,21 +23,31 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.hornak.prototype.model.quizzes.Quiz;
 import com.hornak.prototype.model.quizzes.Team;
 import com.hornak.prototype.model.teams.QuizData;
 import com.hornak.prototype.model.teams.TeamData;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
 import static com.hornak.prototype.MainActivity.QUIZZES_KEY_FUTURE;
 import static com.hornak.prototype.MainActivity.QUIZZES_KEY_PAST;
 import static com.hornak.prototype.MainActivity.QUIZZES_TEAMS;
@@ -44,6 +60,7 @@ import static com.hornak.prototype.MainActivity.mUserData;
 
 public class PendingQuizDetailActivity extends AppCompatActivity {
 
+    private static final String IMAGE_DIRECTORY_NAME = "AndroidCamera";
     @BindView(R.id.quiz_name)
     TextView quizName;
     @BindView(R.id.teams_placeholder)
@@ -62,10 +79,51 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
     Button moveToDoneButton;
     @BindView(R.id.header_layout)
     LinearLayout headerLayout;
-
     View quizTeamLayout;
     boolean isMyTeamRegistered = false;
+    FirebaseStorage storageRef = FirebaseStorage.getInstance();
     private Quiz quiz;
+    private String pictureTeamName = "default";
+    private Uri file;
+
+    private static File getOutputMediaFile(int type) {
+        File mediaStorageDir = new File(
+                Environment
+                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                IMAGE_DIRECTORY_NAME);
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.d(IMAGE_DIRECTORY_NAME, "Failed create "
+                        + IMAGE_DIRECTORY_NAME + " directory");
+                return null;
+            }
+        }
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                Locale.getDefault()).format(new Date());
+        File mediaFile;
+        if (type == MEDIA_TYPE_IMAGE) {
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                    + "IMG_" + timeStamp + ".jpg");
+        } else {
+            return null;
+        }
+        return mediaFile;
+    }
+
+    private static File getOutputMediaFile() {
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES), "CameraDemo");
+
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                return null;
+            }
+        }
+
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        return new File(mediaStorageDir.getPath() + File.separator +
+                "IMG_" + timeStamp + ".jpg");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,6 +231,7 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
                     } catch (NullPointerException e) {
                     }
                     quizTeamLayout.findViewById(R.id.edit_team_points).setVisibility(View.VISIBLE);
+                    quizTeamLayout.findViewById(R.id.take_picture_of_team).setVisibility(View.VISIBLE);
                     quizTeamLayout.invalidate();
                     teamsPlaceholder.addView(quizTeamLayout);
                 }
@@ -349,5 +408,47 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
                 .create();
         dialog.show();
 
+    }
+
+    public void takeTeamPicture(View view) {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+
+        file = Uri.fromFile(getOutputMediaFile(1)); //(getOutputMediaFile(1));
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, file);
+
+//        pictureTeamName = ((TextView)((LinearLayout)view.getParent()).findViewById(R.id.team_name)).getText().toString();
+
+        startActivityForResult(intent, 100);
+    }
+
+    public Uri getOutputMediaFileUri(int type) {
+        return Uri.fromFile(getOutputMediaFile(type));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 100) {
+            if (resultCode == RESULT_OK) {
+                Uri file = Uri.fromFile(new File("path/to/images/rivers.jpg"));
+                StorageReference riversRef = storageRef.getReference().child("images/" + file.getLastPathSegment());
+                UploadTask uploadTask = riversRef.putFile(file);
+
+                // Register observers to listen for when the download is done or if it fails
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        Toast.makeText(getApplicationContext(), "Upload failure!", Toast.LENGTH_LONG).show();
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                        Toast.makeText(getApplicationContext(), "Upload success!", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        }
     }
 }

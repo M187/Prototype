@@ -45,6 +45,16 @@
             android:background="@drawable/ic_edit_black_24dp"
             android:onClick="editPoints"
             android:visibility="gone" />
+
+        <Button
+            android:id="@+id/take_picture_of_team"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="end"
+            android:background="@drawable/ic_camera_alt_black_24dp"
+            android:onClick="takeTeamPicture"
+            android:visibility="gone" />
+
     </LinearLayout>
 
 </LinearLayout>
