@@ -110,21 +110,6 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
         return mediaFile;
     }
 
-    private static File getOutputMediaFile() {
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), "CameraDemo");
-
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                return null;
-            }
-        }
-
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        return new File(mediaStorageDir.getPath() + File.separator +
-                "IMG_" + timeStamp + ".jpg");
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -413,17 +398,10 @@ public class PendingQuizDetailActivity extends AppCompatActivity {
     public void takeTeamPicture(View view) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-
         file = Uri.fromFile(getOutputMediaFile(1)); //(getOutputMediaFile(1));
         intent.putExtra(MediaStore.EXTRA_OUTPUT, file);
-
 //        pictureTeamName = ((TextView)((LinearLayout)view.getParent()).findViewById(R.id.team_name)).getText().toString();
-
         startActivityForResult(intent, 100);
-    }
-
-    public Uri getOutputMediaFileUri(int type) {
-        return Uri.fromFile(getOutputMediaFile(type));
     }
 
     @Override
